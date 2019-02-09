@@ -1,16 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\PosJaga;
+use App\Exports\PosJaga\PosJagaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use Auth;
 use App\PosJaga;
 use App\Kecamatan;
 use App\Wilayah;
 use App\Kelurahan;
 use Illuminate\Http\Request;
 use DB;
+use PDF;
 
 class PosJagaController extends Controller
 {
@@ -19,6 +22,20 @@ class PosJagaController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    
+    public function Export(Request $request)
+    {
+      $id_kecamatan = $request->id_kecamatan_print;
+      $id_kelurahan = $request->id_kelurahan_print;
+      $nama_pos     = $request->nama_pos;
+      $kontruksi    = $request->kontruksi;
+      $kondisi      = $request->kondisi;
+      $aktifitas    = $request->aktifitas;
+      $date = date('d-M-Y H-i-s');
+      return Excel::download(new PosJagaExport($id_kecamatan,$id_kelurahan,$nama_pos,$kontruksi,$kondisi,$aktifitas), 'PosJaga'.$date.'.xlsx');
+
+    }
+
     public function index(Request $request)
     {
         $keyword = $request->get('search');
@@ -91,13 +108,13 @@ class PosJagaController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'id_kecamatan' => 'required',
-			'id_kelurahan' => 'required',
-			'nama' => 'required'
-		]);
+    			'id_kecamatan' => 'required',
+    			'id_kelurahan' => 'required',
+    			'nama' => 'required'
+    		]);
 
         $posJaga = new \App\PosJaga;
-
+        $users = Auth::user();
         $file = $request->foto;
 
         $namaKecamatan = Wilayah::where('kd_kec',$request->input('id_kecamatan'))->first();
@@ -122,6 +139,7 @@ class PosJagaController extends Controller
           $posJaga->sarana = '0';
           $posJaga->aktifitas = $request->input('aktifitas');
           $posJaga->keterangan = $request->input('keterangan');
+          $posJaga->user_id = $users->id;
         }else{
           $posJaga->id_kecamatan = $request->input('id_kecamatan');
           $posJaga->id_kelurahan = $request->input('id_kelurahan');
@@ -138,6 +156,7 @@ class PosJagaController extends Controller
           $posJaga->sarana = '0';
           $posJaga->aktifitas = $request->input('aktifitas');
           $posJaga->keterangan = $request->input('keterangan');
+          $posJaga->user_id = $users->id;
         }
 
         // $requestData = $request->all();
@@ -205,6 +224,7 @@ class PosJagaController extends Controller
     			'id_kelurahan' => 'required',
     			'nama' => 'required'
     		]);
+        $users = Auth::user();
           $namaKecamatan = Wilayah::where('kd_kec',$request->input('id_kecamatan'))->first();
           $namaKelurahan = Wilayah::where('kd_kel_des',$request->input('id_kelurahan'))->where('kd_kec',$request->input('id_kecamatan'))->first();
         $file = $request->foto;
@@ -229,6 +249,7 @@ class PosJagaController extends Controller
             'kepemilikan' => $request->input('kepemilikan'),
             'aktifitas' => $request->input('aktifitas'),
             'keterangan' => $request->input('keterangan'),
+            'user_id' => $users->id,
           );
 
         }else{
@@ -246,6 +267,7 @@ class PosJagaController extends Controller
             'kepemilikan' => $request->input('kepemilikan'),
             'aktifitas' => $request->input('aktifitas'),
             'keterangan' => $request->input('keterangan'),
+            'user_id' => $users->id,
           );
         }
 
@@ -329,13 +351,85 @@ class PosJagaController extends Controller
 
       $id_kecamatan = $request->id_kecamatan;
       $id_kelurahan = $request->id_kelurahan;
+      $nama_pos = $request->nama_pos;
+      $kontruksi = $request->kontruksi;
+      $kondisi = $request->kondisi;
+      $aktifitas = $request->aktifitas;
+      $alamat = $request->alamat;
+      $luas = $request->luas;
+      $luas_tanah = $request->luas_tanah;
+      $kepemilikan = $request->kepemilikan;
 
-      $query= PosJaga::select('pos_jagas.*');
+      $query= PosJaga::select('pos_jagas.*','users.name')->join('users', 'users.id' , '=','pos_jagas.user_id');
       
       if (!empty($id_kecamatan)) $query->where('pos_jagas.id_kecamatan', "$id_kecamatan");
       if (!empty($id_kelurahan)) $query->where('pos_jagas.id_kelurahan', "$id_kelurahan");
-      $posjaga = $query->get();
+      if (!empty($kontruksi)) $query->where('pos_jagas.konstruksi', "$kontruksi");
+      if (!empty($kondisi)) $query->where('pos_jagas.kondisi', "$kondisi");
+      if (!empty($aktifitas)) $query->where('pos_jagas.aktifitas', "$aktifitas");
+      if (!empty($nama_pos)) $query->where('pos_jagas.nama','LIKE', "%$nama_pos%");
+      if (!empty($luas)) $query->where('pos_jagas.luas','LIKE', "%$luas%");
+      if (!empty($luas_tanah)) $query->where('pos_jagas.luas_tanah','LIKE', "%$luas_tanah%");
+      if (!empty($kepemilikan)) $query->where('pos_jagas.kepemilikan','LIKE', "%$kepemilikan%");
+      if (!empty($alamat)) $query->where('pos_jagas.alamat','LIKE', "%$alamat%");
+      $posjaga = $query->latest()->get();
 
       return json_encode($posjaga);
+    }
+
+        public function printData(Request $request)
+    {
+
+      $id_kecamatan = $request->id_kecamatan_print;
+      $id_kelurahan = $request->id_kelurahan_print;
+      $nama_pos     = $request->nama_pos;
+      $kontruksi    = $request->kontruksi;
+      $kondisi      = $request->kondisi;
+      $aktifitas    = $request->aktifitas;
+
+
+      $query= PosJaga::select('pos_jagas.*');
+      
+      if ($id_kecamatan != '0') $query->where('pos_jagas.id_kecamatan', "$id_kecamatan");
+      if ($id_kelurahan != '0') $query->where('pos_jagas.id_kelurahan', "$id_kelurahan");
+      if ($kontruksi != '0')    $query->where('pos_jagas.konstruksi', "$kontruksi");
+      if ($kondisi != '0')      $query->where('pos_jagas.kondisi', "$kondisi");
+      if ($aktifitas != '0')    $query->where('pos_jagas.aktifitas', "$aktifitas");
+      if (!empty($nama_pos))    $query->where('pos_jagas.nama', "like", "%$nama_pos%");
+      $posJaga = $query->get();
+
+
+      $table = DB::table("wilayah");
+        if ($id_kecamatan != '0')  $table->where("kd_kec",$id_kecamatan);
+        $table->where("kd_kel_des", 00);
+        
+      $slcKec = $table
+                ->select("id","kd_prov","kd_kota_kab","kd_kec","kd_kel_des","nama")
+                ->get();
+
+      if ($id_kecamatan == 0) {
+        $kecamatan = "semua";
+      }else{
+        $kecamatan = $slcKec[0]->nama;
+      }
+
+      $table2 = DB::table("wilayah");
+        if ($id_kecamatan != '0')  $table2->where("kd_kec",$id_kecamatan);
+        if ($id_kelurahan != '0')  $table2->where("kd_kel_des",$id_kelurahan);
+        
+      $slcKelDes = $table2
+                ->select("id","kd_prov","kd_kota_kab","kd_kec","kd_kel_des","nama")
+                ->get();
+      if ($id_kelurahan == 0) {
+        $kelurahanDesa = "semua";
+      }else{
+        $kelurahanDesa = $slcKelDes[0]->nama;
+      }
+
+      $pdf = PDF::loadView('posJaga.pos-jaga.print', compact('posJaga', 'kecamatan', 'kelurahanDesa'));
+      
+      return $pdf->setPaper('folio')->stream();
+
+      // return view('posJaga.pos-jaga.print', compact('posJaga'));
     }
 }

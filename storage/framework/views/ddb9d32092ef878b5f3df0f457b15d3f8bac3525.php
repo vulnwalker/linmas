@@ -3,10 +3,6 @@
   Data Anggota Linmas
 <?php $__env->stopSection(); ?>
 
-<?php $__env->startSection('judul'); ?>
-    Data Anggota Linmas
-<?php $__env->stopSection(); ?>
-
 <?php $__env->startSection('content'); ?>
 <style type="text/css">
   .modal-content {
@@ -27,6 +23,13 @@
     padding: 0%;
     border-top: 1px solid #e9ecef;
     padding-right: 1%;
+}
+.modal-body {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+    padding-bottom: 0%;
 }
 </style>
  <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>" />
@@ -49,11 +52,11 @@
                       }
                     ?>
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <h4 class="card-title">Data Anggota Linmas</h4>
                          
                         </div>
-                        <div class="col-md-3" style="text-align:right;">
+                        <div class="col-md-6" style="text-align:right;">
                           <a <?php echo e($hrefUser); ?> class="btn btn-success btn-sm <?php echo e($class); ?>" title="Add New Kecamatan">
                               
                                 <i class="fal fa-plus"></i> Baru
@@ -65,11 +68,15 @@
                           </a>
                           <a onclick="checkDetele()" class="btn btn-danger btn-sm" title="Edit New Kecamatan" style="color:white;">
                               
-                              <i class="fal fa-trash-alt"></i>   Hapus
+                              <i class="fal fa-trash-alt"></i> Hapus
                           </a>
 
-                          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#btnSearch">
+                          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#btnSearch">
                            <i class="fal fa-search"></i>  Cari
+                          </button>
+
+                          <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btnPrint">
+                            <i class="fal fa-print"></i> Print
                           </button>
                         </div>
                       
@@ -78,7 +85,7 @@
                     </div>
                     <hr style="margin-top: 0%;margin-bottom: 0%;">
                     </div>
-                    <div class="card-body"  style="padding: 15px 15px 10px !important;">
+                    <div class="card-body"  style="padding: 1px 15px 10px !important;">
                      <div class="row">
                       <div class="col-md-4">
                         <div class="">
@@ -112,26 +119,15 @@
                           <div class="col-md-5">
                             <span>Data/ halaman </span>
                           </div>
-                          <div class="col-md-4">
-                            <input type="text" id="page" class="form-control" placeholder="25" value="<?php echo e(request('paging')); ?>" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;">
+                          <div class="col-md-2">
+                            <input type="text" id="page" class="form-control" placeholder="25" value="<?php echo e(request('paging')); ?>" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;padding-right: 5px !important;">
                           </div>
-                          <div class="col-md-3">
-                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;">Tampilkan</button>
+                          <div class="col-md-5">
+                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;width: 100%;">Tampilkan</button>
                           </div>
                           <div class="col-md-2">
                           </div>
                       </div>
-
-
-<!--                       <div class="row" style="margin-bottom: 1%;">
-                        <div class="col-md-5">
-                        </div>
-                        <div class="col-md-7">
-                          <div style="margin-top: 2%;margin-left: -2px;margin-bottom: 3% width: 100%;">
-                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin:  0%; margin-left:  1%;">Tampilkan</button>
-                          </div>
-                        </div>
-                      </div> -->
 
                       </div>
                     </div>
@@ -155,13 +151,13 @@
                                               </label>
                                             </div>
                                         </th>
-                                        <th>Nama / Jenis Kelamin / Tgl Lahir</th>
-                                        <th style="width: 18%;">Agama / Pendidikan / Status</th>
+                                        <th style="width: 20%;">Nama/ Kelamin/ Tgl Lahir</th>
+                                        <th style="width: 12%;">Agama/ Status</th>
                                         <th>Alamat</th>
-                                        <th>No KTP / NO HP</th>
+                                        <th>No KTP/ NO HP</th>
                                         <th style="width: 8%;text-align: left;">Ukuran</th>
-                                        <th >Keterangan</th>
                                         <th style="width: 8%;text-align: center;">Pengesahan</th>
+                                        <th >Keterangan</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody">
@@ -176,13 +172,13 @@
                                             </label>
                                           </div>
                                       </td>
-                                        <td>- <?php echo e($item->nama); ?> <br>
-                                            - <?php echo e($item->jenis_kelamin); ?> <br>
+                                        <td><?php echo e($item->nama); ?> <br>
+                                            <?php echo e($item->jenis_kelamin); ?> <br>
                                             <?php
                                               $ExplodeTanggal = explode('/',$item->tgl_lahir);
                                               $TanggalLahir =  $ExplodeTanggal[1].'-'.$ExplodeTanggal[0].'-'.$ExplodeTanggal[2];
                                             ?>
-                                            - <?php echo e($item->tempat_lahir); ?>, <?php echo e($TanggalLahir); ?></td>
+                                            <?php echo e($item->tempat_lahir); ?>, <?php echo e($TanggalLahir); ?></td>
                                         <td>   <?php echo e($item->agama); ?>
 
                                           <br> <?php echo e($item->pendidikan); ?>
@@ -199,17 +195,20 @@
                                           <br> Kel/Des. <?php echo e($item->alamat_kelurahan); ?>
 
                                         </td>
-                                        <td style="width: 13%;">- <?php echo e($item->no_ktp); ?>
+                                        <td style="width: 13%;">
+                                          <?php echo e($item->no_ktp); ?>
 
-                                          <br>- <?php echo e($item->hp); ?>
-
-                                        </td>
-                                        <td style="text-align: left;">Baju : <?php echo e($item->uk_baju); ?><br> Sepatu : <?php echo e($item->uk_sepatu); ?>
+                                          <br><?php echo e($item->hp); ?>
 
                                         </td>
-                                        <td>
-                                          <br>- <?php echo e($item->keterangan); ?>
-
+                                        <td style="text-align: left;">
+                                          Baju : <?php echo e($item->uk_baju); ?> <br> 
+                                          Sepatu : <?php echo e($item->uk_sepatu); ?> <br>
+                                          <?php if($item->foto): ?>
+                                             Sudah DiFoto
+                                          <?php else: ?>
+                                             Belum DiFoto
+                                          <?php endif; ?>
                                         </td>
                                         <td>
                                           <?php if($item->status_linmas == 1): ?>
@@ -220,15 +219,16 @@
 
                                           <?php endif; ?>
                                         </td>
-                                        
+                                        <td>
+                                          <br><?php echo e($item->keterangan); ?>
+
+                                        </td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>
                             </table>
                             <div class="pagination">
                             </div>
-                            <div class="pagination-wrapper"> <?php echo $linmas->appends(['paging' => Request::get('paging')])->render(); ?> </div>
-                            
 
                         </div>
 
@@ -355,6 +355,89 @@
                         </div>
                       </div>
 
+                      <div class="modal fade bd-example-modal-lg" id="btnPrint" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
+                        <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+
+                            <div class="modal-header" style="text-align:left;display:inline-flex !important;">
+                              <h5 class="modal-title" id="exampleModalLabel">  <i class="fal fa-print"></i> Print Data / Export Excel</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                          <div class="row" style="width: 104%;">
+                            <div class="col-md-6">
+                              <div class="">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <input type="text" id = "nama2"  name="nama2" class="form-control" placeholder="Cari Nama Linmas.." value="<?php echo e(request('nama')); ?>" style="font-size: 15px; border: 1px solid #b5daff;width: 100%;margin-bottom: 2%;">
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <?php echo Form::select('status_linmas', [
+                                       '0' => 'Belum Disahkan',
+                                       '1' => 'Disahkan',
+                                     ],'0', ['id'=>'status_linmas2','class' => 'form-control','style' => 'font-size: 15px;margin-bottom: 3%; width:100%;']); ?>
+
+                                   </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                              <div class="">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <?php echo Form::select('agama', ['' => '-- Agama --','Islam' => 'Islam','Kristen' => 'Kristen','Kartolik' => 'Kartolik', 'Budha' => 'Budha', 'Hindu' => 'Hindu', 'Konghucu' => 'Konghucu'], '', ['id'=>'agama2','class' => 'form-control','style' => 'margin-bottom: 3%']); ?>
+
+                                  </div>
+                                
+
+                                <div class="col-md-6">
+                                   <?php echo Form::select('jenis_kelamin', ['' => '-- Jenis Kelamin --', 'Laki-Laki' => 'Laki-Laki', 'Perempuan' => 'Perempuan'], '', ['id'=>'jenis_kelamin2','class' => 'form-control']); ?>
+
+                                  </div>
+                                  </div>
+
+                               <div class="row">
+                                  <div class="col-md-6">
+                                    <?php echo Form::select('pendidikan', ['' => '--Pendidikan--','SD' => 'SD','SMP' => 'SMP','SMA/SMK' => 'SMA/SMK', 'Diploma' => 'Diploma', 'Sarjana' => 'Sarjana', 'Pasca Sarjana' => 'Pasca Sarjana', 'Doktor' => 'Doktor'],'', ['id'=>'pendidikan2','class' => 'form-control']); ?>
+
+                                  </div>
+                                
+
+                                <div class="col-md-6">
+                                   <?php echo Form::select('status', ['' => '--Status--','Janda' => 'Janda','Duda' => 'Duda','Kawin' => 'Kawin', 'Belum Kawin' => 'Belum Kawin'],'', ['id'=>'status2','class' => 'form-control']); ?>
+
+                                  </div>
+                                </div>
+
+                                </div>
+                              </div>
+
+
+                          </div>
+
+                          <div class="row" style="margin-bottom: 1%;">
+                            <div class="col-md-12">
+                              <div style="margin-top: 1%;margin-left: 0px;margin-bottom: 3%;">
+                                <button onclick="PrintData()" id="search" class="btn btn-default btn-sm" style="margin:  0%;"> <i class="fal fa-print"></i> Print</button>
+                                <button onclick="ExportExcel()" id="search" class="btn btn-success btn-sm" style="margin:  0%;"> <i class="fal fa-file-excel"></i> Export Excel</button>
+                              </div>
+                            </div>
+                          </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                 </div>
             </div>
@@ -364,6 +447,7 @@
     <script type="text/javascript">
     $( document ).ready(function() {
         pagePaginathing();
+        searchData();
     });
 
     function checkDetele() {
@@ -385,6 +469,14 @@
           
         }
     });
+    }
+
+    function PrintData() {
+      window.open('/linmas/data/print?id_kecamatan_print='+ $("#id_kecamatan").val()+'&id_kelurahan_print='+ $("#id_kelurahan").val()+'&status_linmas_print='+ $("#status2").val()+'&nama='+$("#nama2").val()+'&agama='+$("#agama2").val()+'&jenis_kelamin='+$("#jenis_kelamin2").val()+'&status_linmas='+$("#status_linmas2").val()+'&pendidikan='+$("#pendidikan2").val(), '_blank');
+    }
+    function ExportExcel() {
+      window.open('/linmas/export?id_kecamatan_print='+ $("#id_kecamatan").val()+'&id_kelurahan_print='+ $("#id_kelurahan").val()+'&status_kawin='+ $("#status2").val()+'&nama='+$("#nama2").val()+'&agama='+$("#agama2").val()+'&jenis_kelamin='+$("#jenis_kelamin2").val()+'&status_linmas='+$("#status_linmas2").val()+'&pendidikan='+$("#pendidikan2").val(),'_blank');
+    
     }
 
     function DeleteData(){
@@ -515,12 +607,54 @@
 
     }
 
+    function ChangeKecamatanPrint() {
+
+          var id_kecamatan = $('#id_kecamatan_print').val();
+          if(id_kecamatan) {
+              $.ajax({
+                  url: '/getkelurahan/get/'+id_kecamatan,
+                  type:"GET",
+                  dataType:"json",
+                  beforeSend: function(){
+                      var loader = '<div id="loading"><ul class="bokeh"><li></li><li></li><li></li></ul></div>';
+                      if ( $('#loading').length ) {
+                        $('#loading').remove();
+                      }
+                      $('#loadingData').append(loader);
+                  },
+
+                  success:function(data) {
+
+                      $('select[name="id_kelurahan_print"]').empty();
+
+                      $.each(data, function(key, value){
+
+                          $('select[name="id_kelurahan_print"]').append('<option value="'+ value +'">' + key + '</option>');
+
+                      });
+                  },
+                  complete: function(){
+                      $('#loading').remove();
+                  }
+              });
+          } else {
+              $('select[name="id_kelurahan_print"]').empty();
+          }
+
+
+    }
+
     </script>
 
 
 
   <script type="text/javascript">
      function searchData() {
+          var loader = '<div id="loading"><ul class="bokeh"><li></li><li></li><li></li></ul></div>';
+	          if ( $('#loading').length ) {
+	            $('#loading').remove();
+	          }
+          $('#loadingData').append(loader);
           var jmlData = $('#page').val();
           $.ajax({
           url: '/linmas/refreshTable',
@@ -542,6 +676,7 @@
             type: "GET",
             dataType: "json",
             success:function(data){
+            	$('#loading').remove();
                $('#btnSearch').modal('hide');
               $('#tbody').empty();
               var noColumn = 1;
@@ -555,10 +690,38 @@
                var status_linmas = '';
               }
 
-                var ExplodeTanggal = element.tgl_lahir.split('/');
-                var TanggalLahir = ExplodeTanggal[1]+'-'+ExplodeTanggal[0]+'-'+ExplodeTanggal[2];
+              if (element.hp == null) {
+              	no_hp = '';
+              }else{
+              	no_hp = element.hp;
+              }
 
-                $('#tbody').append("<tr><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td>- "+element.nama+" <br>- "+element.jenis_kelamin+" <br>- "+element.tempat_lahir+", "+TanggalLahir+"</td><td>"+ element.agama +"<br>"+ element.pendidikan +" <br>"+ element.status +"</td><td>"+element.alamat+"<br> Rt "+element.rt+" - Rw "+element.rw+"<br> "+element.alamat_kecamatan+"<br> "+element.alamat_kelurahan+"</td><td style='width: 13%;'>- "+element.no_ktp+"<br>- "+element.hp+"</td><td style='text-align: left;'>Baju : "+element.uk_baju+"<br> Sepatu : "+element.uk_sepatu+"</td><td><br>- "+element.keterangan+"</td><td>"+ status_linmas +"</td>");
+              if (element.keterangan == null) {
+              	keterangan = '';
+              }else{
+              	keterangan = element.keterangan;
+              }
+
+              if (element.keterangan == null) {
+              	keterangan = '';
+              }else{
+              	keterangan = element.keterangan;
+              }
+
+              if(element.foto){
+                foto = "<span style='color:green'>Sudah DiFoto</span>";
+              }else{
+                foto = "<span style='color:red'>Belum DiFoto</span>";
+              }
+
+                var ExplodeTanggal = element.tgl_lahir.split('/');
+                var ExplodeTanggalBuat = element.updated_at.split(' ');
+                var TanggalCreate = ExplodeTanggalBuat[0];
+                var ExplodeGetTanggalBuat = TanggalCreate.split('-');
+                var TanggalLahir = ExplodeTanggal[1]+'-'+ExplodeTanggal[0]+'-'+ExplodeTanggal[2];
+                var TanggalBuat = ExplodeGetTanggalBuat[2]+'-'+ExplodeGetTanggalBuat[1]+'-'+ExplodeGetTanggalBuat[0];
+
+                $('#tbody').append("<tr><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td>"+element.nama+" <br>"+element.jenis_kelamin+" <br>"+element.tempat_lahir+", "+TanggalLahir+"<br>"+ element.pendidikan +"</td><td>"+ element.agama +"<br>"+ element.pendidikan +" <br>"+ element.status +"</td><td>"+element.alamat+"<br> Rt "+element.rt+" - Rw "+element.rw+"<br> Kec. "+element.alamat_kecamatan+"<br> Kel/Des. "+element.alamat_kelurahan+"</td><td style='width: 13%;'>"+element.no_ktp+"<br>"+no_hp+"</td><td style='text-align: left;'>Baju : "+element.uk_baju+"<br> Sepatu : "+element.uk_sepatu+"<br>"+ foto +"</td><td>"+ status_linmas +"</td><td>"+keterangan+"<br><span style='font-size: 11px;color: blue;'>Update Terakhir : <br></span><span style='font-size: 11px;color: blue;'>"+ TanggalBuat +", "+element.name+"</span></td>");
 
                   function getPageList(totalPages, page, maxLength) {
                     if (maxLength < 5) throw "maxLength must be at least 5";

@@ -25,13 +25,19 @@
             vertical-align: unset;
         }
 
+        .perfect-scrollbar-on .main-panel, .perfect-scrollbar-on .sidebar {
+            height: auto !important;
+            max-height: none;
+        }
+
+
       </style>
       <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/loading.css') }}">
 </head>
 <body>
     <div class="wrapper ">
        {{-- @include('admin.sidebar') --}}
-      <div class="main-panel" style="width:  100%;">
+      <div class="main-panel" style="width:  100%;overflow: hidden!important;">
         @include('admin.navbar')
         @yield('content')
       </div>

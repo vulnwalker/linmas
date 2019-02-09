@@ -23,7 +23,7 @@
                             </ul>
                         <?php endif; ?>
 
-                        <?php echo Form::open(['url' => '/ContentPublikasi/content-publikasi', 'class' => 'form-horizontal', 'files' => true]); ?>
+                        <?php echo Form::open(['url' => '/ContentPublikasi/content-publikasi', 'class' => 'form-horizontal', 'id' => 'simpanForm', 'files' => true]); ?>
 
 
                         <?php echo $__env->make('ContentPublikasi.content-publikasi.form', ['formMode' => 'create'], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -111,13 +111,8 @@ div#ephox_mytextarea{
 <div class="form-group">
   <div class="row">
     <div class="col-md-1">
-      <?php if($formMode === 'edit'): ?>
-        <?php echo Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']); ?>
+        <?php echo Form::submit('Simpan', ['class' => 'btn btn-primary','id' => 'simpans','onclick' => 'SimpanBtn()','style' => 'width: 100%;font-size: 17px;']); ?>
 
-      <?php else: ?>
-      <?php echo Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']); ?>
-
-      <?php endif; ?>
     </div>
     <div class="col-md-1">
       <a href="<?php echo e(url('/ContentPublikasi/content-publikasi')); ?>" title="Back" class= "btn btn-danger" style= "width: 100%;font-size: 17px;">
@@ -129,6 +124,33 @@ div#ephox_mytextarea{
 
 
 <script type="text/javascript">
+  function SimpanBtn() {
+    document.getElementById("simpans").disabled = true;
+    document.getElementById("simpanForm").submit();
+  }
+  $( document ).ready(function() {
+      $('#kd_kec').on('change', function(){
+        var stateID = $('#kd_kec').val();
+        if (stateID) {
+          $.ajax({
+            url: '/contentPublikasi/srcKelDes/'+stateID,
+            type: "GET",
+            dataType: "json",
+            success:function(data){
+              $('#kel_des').empty();
+              $('#kel_des').append("<option value=''>SELECT</option>");
+              $.each(data, function(key, value){
+                $('#kel_des').append("<option value="+ value +">"+ key +"</option>");
+              });
+            }
+          });
+        }else{
+          $('#kel_des').empty();
+          $('#kel_des').append("<option value=''>SELECT</option>");
+        }
+      });
+  });
+
 function ChangeStatus(){
   var status_linmas = $('#status_linmas').val();
   if(status_linmas === "2"){

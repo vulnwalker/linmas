@@ -8,6 +8,34 @@
 @endsection
 
 @section('content')
+<style type="text/css">
+  .modal-content {
+    height: auto;
+    min-height: 30%;
+    border-radius: 0;
+    width: 100%;
+    margin: 2%;
+    text-align: left;
+}
+.modal-footer {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    padding: 0%;
+    border-top: 1px solid #e9ecef;
+    padding-right: 1%;
+}
+.modal-body {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+    padding-bottom: 0%;
+}
+</style>
  <meta name="csrf-token" content="{{ csrf_token() }}" />
  <div id="loadingData"></div>
     <div class="content">
@@ -52,6 +80,130 @@
                            <i class="fal fa-search"></i>  Cari
                           </button>
 
+                          <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btnPrint">
+                            <i class="fal fa-print"></i> Print
+                          </button>
+
+                          <div class="modal fade bd-example-modal-lg" id="btnPrint" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
+                        <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+
+                            <div class="modal-header" style="text-align:left;display:inline-flex !important;">
+                              <h5 class="modal-title" id="exampleModalLabel">  <i class="fal fa-print"></i> Print Data / Export Excel</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                            <div class="row" style="width: 104%;">
+                              {{-- move here --}}
+                              <div class="col-md-3">
+                                <label class="control-label">Jenis Sapras</label>
+                              </div>
+                              <div class="col-md-3">
+                                {!! Form::select('jns_sapras', $jenisSapras, null, ('required' == 'required') ? ['id' => 'jns_sapras','style' => 'width:100%;margin-bottom: 2%;','class' => 'form-control'] : ['class' => 'form-control']) !!}
+                              </div>
+                              <div class="col-md-1">
+                                <label class="control-label">Kondisi</label>
+                              </div>
+                              <div class="col-md-2">
+                                <select name="kondisi" id="kondisi" class="form-control">
+                                  <option value="">SEMUA</option>
+                                  <option value="baik">Baik</option>
+                                  <option value="kurang baik">Kurang Baik</option>
+                                  <option value="rusak berat">Rusak Berat</option>
+                                </select>
+                              </div>
+                              <div class="col-md-1">
+                                <label class="control-label">Tahun</label>
+                              </div>
+                              <div class="col-md-2">
+                                <input type="text" name="tahun" id="tahun" class="form-control">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label class="control-label">merk/ type/ spesifikasi</label>
+                              </div>
+                              <div class="col-md-3">
+                                <input type="text" name="keteranganItem" id="keteranganItem" class="form-control">
+                              </div>
+                            </div>
+
+                          <div class="row" style="margin-bottom: 1%;">
+                            <div class="col-md-12">
+                              <div style="margin-top: 1%;margin-left: 0px;margin-bottom: 3%;">
+                                <button onclick="PrintData()" id="search" class="btn btn-default btn-sm" style="margin:  0%;"> <i class="fal fa-print"></i> Print</button>
+                                <button onclick="ExportExcel()" id="search" class="btn btn-success btn-sm" style="margin:  0%;"> <i class="fal fa-file-excel"></i> Export Excel</button>
+                              </div>
+                            </div>
+                          </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                          <div class="modal fade bd-example-modal-lg" id="btnSearch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
+                          <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+
+                              <div class="modal-header" style="text-align:left;display:inline-flex !important;">
+                                <h5 class="modal-title" id="exampleModalLabel">  <i class="fal fa-search"></i> Cari Data</h5>
+                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                              </div>
+                              <div class="modal-body">
+
+                            <div class="row" style="width: 104%;">
+                              <div class="col-md-3">
+                                <label class="control-label">Jenis Sapras</label>
+                              </div>
+                              <div class="col-md-3">
+                                {!! Form::select('jns_sapras', $jenisSapras, null, ('required' == 'required') ? ['id' => 'jns_sapras','style' => 'width:100%;margin-bottom: 2%;','class' => 'form-control'] : ['class' => 'form-control']) !!}
+                              </div>
+                              <div class="col-md-1">
+                                <label class="control-label">Kondisi</label>
+                              </div>
+                              <div class="col-md-2">
+                                <select name="kondisi" id="kondisi" class="form-control">
+                                  <option value="">SEMUA</option>
+                                  <option value="baik">Baik</option>
+                                  <option value="kurang baik">Kurang Baik</option>
+                                  <option value="rusak berat">Rusak Berat</option>
+                                </select>
+                              </div>
+                              <div class="col-md-1">
+                                <label class="control-label">Tahun</label>
+                              </div>
+                              <div class="col-md-2">
+                                <input type="text" name="tahun" id="tahun" class="form-control">
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-3">
+                                <label class="control-label">merk/ type/ spesifikasi</label>
+                              </div>
+                              <div class="col-md-3">
+                                <input type="text" name="keteranganItem" id="keteranganItem" class="form-control">
+                              </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 1%;">
+                              <div class="col-md-12">
+                                <div style="margin-top: 1%;margin-left: 0px;margin-bottom: 3%;">
+                                  <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin:  0%;">Cari</button>
+                                </div>
+                              </div>
+                            </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         </div>
                     </div>
                     </div>
@@ -82,54 +234,20 @@
 
                             </div>
                         </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="row">
-                                <div class="col-md-5">
-                                  <span>Jenis Sapras</span>
-                                </div>
-                                <div class="col-md-7">
-                                   {!! Form::select('jns_sapras', $jenisSapras, null, ('required' == 'required') ? ['id' => 'jns_sapras','style' => 'width:100%;margin-bottom: 2%;','class' => 'form-control'] : ['class' => 'form-control']) !!} 
-                                </div>
-                              </div>
-                            </div>
-                            {{-- <div class="col-md-12">
-                              <div class="row">
-                                <div class="col-md-5">
-                                  <span>Kelurahan </span>
-                                </div>
-                                <div class="col-md-7">
-                                  {!! Form::select('id_kelurahan',$kelurahan, null, ('required' == 'required') ? ['id' => 'id_kelurahan','style' => 'width:100%;margin-bottom: 2%;','class' => 'form-control'] : ['class' => 'form-control']) !!}
-                                </div>
-                              </div>
-
-                            </div> --}}
-                        </div>
 
                         <div class="row">
                           <div class="col-md-5">
-                            <span>Data/ halaman </span>
+                            <span>Data / halaman </span>
                           </div>
-                          <div class="col-md-4">
-                            <input type="text" id="page" class="form-control" placeholder="25" value="{{ request('paging') }}" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;">
+                          <div class="col-md-2">
+                            <input type="text" id="page" class="form-control" placeholder="25" value="{{ request('paging') }}" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;padding-right: 5px !important;">
                           </div>
-                          <div class="col-md-3">
-                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;">Tampilkan</button>
+                          <div class="col-md-5">
+                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;width: 100%;">Tampilkan</button>
                           </div>
                           <div class="col-md-2">
                           </div>
                       </div>
-
-
-<!--                       <div class="row" style="margin-bottom: 1%;">
-                        <div class="col-md-5">
-                        </div>
-                        <div class="col-md-7">
-                          <div style="margin-top: 2%;margin-left: -2px;margin-bottom: 3% width: 100%;">
-                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin:  0%; margin-left:  1%;">Search</button>
-                          </div>
-                        </div>
-                      </div> -->
 
                       </div>
                     </div>
@@ -149,6 +267,8 @@
                                         </th>
                                         <th>Jenis Sapras</th>
                                         <th>Merk / Type / Spesifikasi</th>
+                                        <th>Kecamatan</th>
+                                        <th>Kelurahan/ Desa</th>
                                         <th>Tahun</th>
                                         <th>Kondisi</th>
                                     </tr>
@@ -156,19 +276,21 @@
                                 <tbody  id="tbody">
                                 @foreach($sapras as $item)
                                     <tr>
-                                        <td style="text-align: center;line-height: 40px;">{{ $loop->iteration or $item->id }}</td>
+                                        <td style="text-align: center;line-height: 40px;">{{ $loop->iteration or $item['id'] }}</td>
                                         <td style="text-align: center;">
                                           <div class="form-check" style="padding-left: 0rem;">
                                             <label class="form-check-label" style="padding-left: 30px;">
-                                              <input type="checkbox" class="checkbox" value="{{ $item->id }}">
+                                              <input type="checkbox" class="checkbox" value="{{ $item['id'] }}">
                                               <span class="form-check-sign"></span>
                                             </label>
                                           </div>
                                       </td>
-                                        <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->ket_item }}</td>
-                                        <td>{{ $item->tahun }}</td>
-                                        <td>{{ $item->kondisi }}</td>
+                                        <td>{{ $item['nama'] }}</td>
+                                        <td>{{ $item['ket_item'] }}</td>
+                                        <td>Kec. {{ $item['id_kecamatan'] }}</td>
+                                        <td>Kel/Des. {{ $item['id_kelurahan'] }}</td>
+                                        <td>{{ $item['tahun'] }}</td>
+                                        <td>{{ $item['kondisi'] }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -320,14 +442,24 @@ if(hakAkses == 1 || hakAkses == 3){
 
 
   <script type="text/javascript">
+    function PrintData() {
+      window.open('/sapras/data/print?id_kecamatan='+ $("#id_kecamatan").val()+'&id_kelurahan='+ $("#id_kelurahan").val()+'&jns_sapras='+ $("#jns_sapras").val()+'&kondisi='+$("#kondisi").val()+'&tahun='+$("#tahun").val()+'&keteranganItem='+$("#keteranganItem").val(), '_blank');
+    }
+    function ExportExcel() {
+      window.open('/sapras/export?id_kecamatan='+ $("#id_kecamatan").val()+'&id_kelurahan='+ $("#id_kelurahan").val()+'&jns_sapras='+ $("#jns_sapras").val()+'&kondisi='+$("#kondisi").val()+'&tahun='+$("#tahun").val()+'&keteranganItem='+$("#keteranganItem").val(),'_blank');
+    
+    }
      function searchData() {
           var jmlData = $('#page').val();
           $.ajax({
           url: '/sapras/srcSapras',
             data: {
-              jns_sapras: $("#jns_sapras").val(),
-              id_kecamatan: $("#id_kecamatan").val(),
-              id_kelurahan: $("#id_kelurahan").val()
+              jns_sapras:       $("#jns_sapras").val(),
+              id_kecamatan:     $("#id_kecamatan").val(),
+              id_kelurahan:     $("#id_kelurahan").val(),
+              kondisi:          $("#kondisi").val(),
+              tahun:            $("#tahun").val(),
+              keteranganItem:   $("#keteranganItem").val()
             },
             type: "GET",
             dataType: "json",
@@ -336,7 +468,7 @@ if(hakAkses == 1 || hakAkses == 3){
               var noColumn = 1;
               $.each(data, function(index, element){
 
-                $('#tbody').append("<tr><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td>"+element.nama+"</td><td>"+element.ket_item+"</td><td>"+element.tahun+"</td><td>"+ element.kondisi +"</td>");
+                $('#tbody').append("<tr><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td>"+element.nama+"</td><td>"+element.ket_item+"</td><td>Kec. "+element.id_kecamatan+"</td><td>Kel/Des. "+element.id_kelurahan+"</td><td>"+element.tahun+"</td><td>"+ element.kondisi +"</td>");
 
                   function getPageList(totalPages, page, maxLength) {
                     if (maxLength < 5) throw "maxLength must be at least 5";

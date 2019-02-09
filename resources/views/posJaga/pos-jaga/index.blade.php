@@ -7,6 +7,35 @@
   Data Pos Jaga
 @endsection
 @section('content')
+<style type="text/css">
+  .modal-content {
+    height: auto;
+    min-height: 30%;
+    border-radius: 0;
+    width: 100%;
+    margin: 2%;
+    text-align: left;
+}
+.modal-footer {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    padding: 0%;
+    border-top: 1px solid #e9ecef;
+    padding-right: 1%;
+}
+
+.modal-body {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+    padding-bottom: 0%;
+}
+</style>
  <meta name="csrf-token" content="{{ csrf_token() }}" />
  <div id="loadingData">
 
@@ -28,11 +57,11 @@
                       }
                       @endphp
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <h4 class="card-title">Data Pos Jaga</h4>
                           <p class="card-category"></p>
                         </div>
-                        <div class="col-md-3" style="text-align:right;">
+                        <div class="col-md-6" style="text-align:right;">
                           {{-- <a class="btn btn-info btn-lg" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="border-radius:  50%;">
                             <i class="fa fa-search	"></i>
                           </a> --}}
@@ -44,11 +73,16 @@
                               <i class="fal fa-pencil-alt"></i> Edit
                           </a>
                           <a onclick="DeleteData()" class="btn btn-danger btn-sm" title="Edit New Kecamatan" style="color:white;">
-                               <i class="fal trash-alt"></i>  Hapus
+                              {{-- <i class="fa fa-trash" aria-hidden="true"></i> --}}
+                              <i class="fal fa-trash-alt"></i> Hapus
                           </a>
 
-                          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#btnSearch">
+                          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#btnSearch">
                            <i class="fal fa-search"></i>  Cari
+                          </button>
+
+                          <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btnPrint">
+                            <i class="fal fa-print"></i> Print
                           </button>
                         </div>
                     </div>
@@ -87,11 +121,11 @@
                           <div class="col-md-5">
                             <span>Data/ halaman </span>
                           </div>
-                          <div class="col-md-4">
-                            <input type="text" id="page" class="form-control" placeholder="25" value="{{ request('paging') }}" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;">
+                          <div class="col-md-2">
+                            <input type="text" id="page" class="form-control" placeholder="25" value="{{ request('paging') }}" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;padding-right: 5px !important;">
                           </div>
-                          <div class="col-md-3">
-                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;">Tampilkan</button>
+                          <div class="col-md-5">
+                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;width: 100%;">Tampilkan</button>
                           </div>
                           <div class="col-md-2">
                           </div>
@@ -159,7 +193,7 @@
                                           </div>
                                       </td>
                                       <td>{{ $item->nama }}</td>
-                                      <td>{{$item->alamat}}<br>{{$item->alamat_kec}}<br>{{$item->alamat_kel}}</td>
+                                      <td>{{$item->alamat}}<br>Kec. {{$item->alamat_kec}}<br>Kel/Des. {{$item->alamat_kel}}</td>
                                       <td>
                                         - @if($item->konstruksi == 1)
                                           Permanen
@@ -198,6 +232,173 @@
                         </div>
                             <div class="pagination">
                             </div>
+
+                            <div class="modal fade bd-example-modal-lg" id="btnPrint" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
+                        <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+
+                            <div class="modal-header" style="text-align:left;display:inline-flex !important;">
+                              <h5 class="modal-title" id="exampleModalLabel">  <i class="fal fa-print"></i> Print Data / Export Excel</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                          <div class="row" style="width: 104%;">
+                            <div class="col-md-3">
+                              <input type="text" id = "nama_pos2"  name="nama_pos2" class="form-control" placeholder="Cari Nama Pos Jaga.." value="{{ request('nama_pos') }}" style="font-size: 15px; border: 1px solid #b5daff;width: 100%;margin-bottom: 2%;">
+                            </div>
+                            <div class="col-md-3">
+                              {!! Form::select('kontruksi', [
+                                 '0' => ' -- Kontruksi -- ',
+                                 '1' => 'Permanen',
+                                 '2' => 'Semi Permanen',
+                                 '3' => 'Darurat',
+                               ],' ', ['id'=>'kontruksi2','class' => 'form-control','style' => 'font-size: 15px;margin-bottom: 3%; width:100%;']) !!}
+                            </div>
+                            <div class="col-md-3">
+                              {!! Form::select('kondisi', [
+                                 '0' => ' -- Kondisi -- ',
+                                 '1' => 'Baik',
+                                 '2' => 'Kurang Baik',
+                                 '3' => 'Rusak Berat',
+                               ],' ', ['id'=>'kondisi2','class' => 'form-control','style' => 'font-size: 15px;margin-bottom: 3%; width:100%;']) !!}
+                            </div>
+                            <div class="col-md-3">
+                              {!! Form::select('aktifitas', [
+                                 '0' => ' -- Aktifitas -- ',
+                                 '1' => 'Aktif',
+                                 '2' => 'Tidak Aktif',
+                               ],' ', ['id'=>'aktifitas2','class' => 'form-control','style' => 'font-size: 15px;margin-bottom: 3%; width:100%;']) !!}
+                            </div>
+                          </div>
+
+                          <div class="row" style="margin-bottom: 1%;">
+                            <div class="col-md-12">
+                              <div style="margin-top: 1%;margin-left: 0px;margin-bottom: 3%;">
+                                <button onclick="PrintData()" id="search" class="btn btn-default btn-sm" style="margin:  0%;"> <i class="fal fa-print"></i> Print</button>
+                                <button onclick="ExportExcel()" id="search" class="btn btn-success btn-sm" style="margin:  0%;"> <i class="fal fa-file-excel"></i> Export Excel</button>
+                              </div>
+                            </div>
+                          </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="modal fade bd-example-modal-lg" id="btnSearch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
+                        <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+
+                            <div class="modal-header" style="text-align:left;display:inline-flex !important;">
+                              <h5 class="modal-title" id="exampleModalLabel">  <i class="fal fa-search"></i> Cari Data</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                          <div class="row" style="width: 104%;">
+                            <div class="col-md-6">
+                              <div class="">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <input type="text" id = "nama_pos"  name="nama_pos" class="form-control" placeholder="Cari Nama Pos Jaga.." value="{{ request('nama_pos') }}" style="font-size: 15px; border: 1px solid #b5daff;width: 100%;margin-bottom: 2%;">
+                                  </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    {!! Form::select('kontruksi', [
+                                       ' ' => ' -- Kontruksi -- ',
+                                       '1' => 'Permanen',
+                                       '2' => 'Semi Permanen',
+                                       '3' => 'Darurat',
+                                     ],' ', ['id'=>'kontruksi','class' => 'form-control','style' => 'font-size: 15px;margin-bottom: 3%; width:100%;']) !!}
+                                   </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+                            <div class="col-md-6">
+                              <div class="">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <input type="text" id = "alamat"  name="alamat" class="form-control" placeholder="Alamat" value="{{ request('alamat') }}" style="font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 2%;">
+                                  </div>
+                                </div>
+
+
+
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <input type="text" id = "luas"  name="luas" class="form-control" placeholder="Luas Bangunan" value="{{ request('luas') }}" style="font-size: 15px;border: 1px solid #b5daff; width: 100%; margin-bottom: 3%;">
+                                  </div>
+                                  <div class="col-md-6">
+                                    <input type="text" id = "luas_tanah"  name="luas_tanah" class="form-control" placeholder="Luas Tanah" value="{{ request('luas_tanah') }}" style="font-size: 15px;border: 1px solid #b5daff; width: 100%; margin-bottom: 3%;">
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+
+                          <div class="col-md-6">
+                              <div class="">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    {!! Form::select('kondisi', [
+                                       ' ' => ' -- Kondisi -- ',
+                                       '1' => 'Baik',
+                                       '2' => 'Kurang Baik',
+                                       '3' => 'Rusak Berat',
+                                     ],' ', ['id'=>'kondisi','class' => 'form-control','style' => 'font-size: 15px;margin-bottom: 3%; width:100%;']) !!}
+                                   </div>
+
+                                  <div class="col-md-6">
+                                    {!! Form::select('aktifitas', [
+                                       ' ' => ' -- Aktifitas -- ',
+                                       '1' => 'Aktif',
+                                       '2' => 'Tidak Aktif',
+                                     ],' ', ['id'=>'aktifitas','class' => 'form-control','style' => 'font-size: 15px;margin-bottom: 3%; width:100%;']) !!}
+                                   </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                              <div class="">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <input type="text" id = "kepemilikan"  name="kepemilikan" class="form-control" placeholder="Nama Kepemilikan" value="{{ request('kepemilikan') }}" style="font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 2%;">
+                                  </div>
+                                </div>
+
+                                </div>
+                              </div>
+
+
+                          </div>
+
+                          <div class="row" style="margin-bottom: 1%;">
+                            <div class="col-md-12">
+                              <div style="margin-top: 1%;margin-left: 0px;margin-bottom: 3%;">
+                                <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin:  0%;">Cari</button>
+                              </div>
+                            </div>
+                          </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                 </div>
             </div>
@@ -208,7 +409,20 @@
     <script type="text/javascript">
     $( document ).ready(function() {
         pagePaginathing();
+        searchData();
     });
+
+
+
+    function PrintData() {
+      window.open('/posJaga/data/print?id_kecamatan_print='+ $("#id_kecamatan").val()+'&id_kelurahan_print='+ $("#id_kelurahan").val()+'&nama_pos='+$("#nama_pos2").val()+'&kontruksi='+$("#kontruksi2").val()+'&kondisi='+$("#kondisi2").val()+'&aktifitas='+$("#aktifitas2").val());
+    }
+
+    function ExportExcel() {
+      window.open('/posJaga/export?id_kecamatan_print='+ $("#id_kecamatan").val()+'&id_kelurahan_print='+ $("#id_kelurahan").val()+'&nama_pos='+$("#nama_pos2").val()+'&kontruksi='+$("#kontruksi2").val()+'&kondisi='+$("#kondisi2").val()+'&aktifitas='+$("#aktifitas2").val());
+    
+    }
+
 
 
     function DeleteData(){
@@ -335,38 +549,96 @@ if(hakAkses == 1 || hakAkses == 3){
 
     }
 
+
+        function ChangeKecamatanPrint() {
+
+          var id_kecamatan = $('#id_kecamatan_print').val();
+          if(id_kecamatan) {
+              $.ajax({
+                  url: '/getkelurahan/get/'+id_kecamatan,
+                  type:"GET",
+                  dataType:"json",
+                  beforeSend: function(){
+                      var loader = '<div id="loading"><ul class="bokeh"><li></li><li></li><li></li></ul></div>';
+                      if ( $('#loading').length ) {
+                        $('#loading').remove();
+                      }
+                      $('#loadingData').append(loader);
+                  },
+
+                  success:function(data) {
+
+                      $('select[name="id_kelurahan_print"]').empty();
+
+                      $.each(data, function(key, value){
+
+                          $('select[name="id_kelurahan_print"]').append('<option value="'+ value +'">' + key + '</option>');
+
+                      });
+                  },
+                  complete: function(){
+                      $('#loading').remove();
+                  }
+              });
+          } else {
+              $('select[name="id_kelurahan_print"]').empty();
+          }
+
+
+    }
+
     </script>
 
 
 	<script type="text/javascript">
 		 function searchData() {
+          var loader = '<div id="loading"><ul class="bokeh"><li></li><li></li><li></li></ul></div>';
+          if ( $('#loading').length ) {
+            $('#loading').remove();
+          }
+           $('#loadingData').append(loader);
           var jmlData = $('#page').val();
           $.ajax({
           url: '/posJaga/refreshTable',
             data: {
               id_kecamatan: $("#id_kecamatan").val(),
-              id_kelurahan: $("#id_kelurahan").val()
+              id_kelurahan: $("#id_kelurahan").val(),
+              nama_pos: $("#nama_pos").val(),
+              kontruksi: $("#kontruksi").val(),
+              kondisi: $("#kondisi").val(),
+              aktifitas: $("#aktifitas").val(),
+              alamat: $("#alamat").val(),
+              luas: $("#luas").val(),
+              luas_tanah: $("#luas_tanah").val(),
+              kepemilikan: $("#kepemilikan").val(),
             },
             type: "GET",
             dataType: "json",
             success:function(data){
+              $('#loading').remove();
               $('#tbody').empty();
               var noColumn = 1;
               $.each(data, function(index, element){
+              
               	if (element.konstruksi == 1) {
               		var konstruksi = "Permanen";
               	}else if (element.konstruksi == 2) {
               		var konstruksi = "Semi Permanen";
-              	}else{
+              	}else if(element.konstruksi == 3){
               		var konstruksi = "Darurat";
-              	}
+              	}else{
+                  var konstruksi = "";
+                }
+
               	if (element.kondisi == 1) {
               		var kondisi = "Baik";
               	}else if (element.kondisi == 2) {
               		var kondisi = "Kurang Baik";
-              	}else{
+              	}else if (element.kondisi == 3){
               		var kondisi = "Rusak Berat";
-              	}
+              	}else{
+                  var kondisi = "";
+                }
 
                 if (element.aktifitas == 1) {
                     var aktifitas ="Aktif"; 
@@ -375,7 +647,39 @@ if(hakAkses == 1 || hakAkses == 3){
                 }else{
                     var aktifitas =""; 
                 }
-                $('#tbody').append("<tr><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td>"+ element.nama +"</td><td>"+element.alamat+"<br>"+element.alamat_kec+"<br>"+element.alamat_kel+"</td><td>- "+konstruksi+"<br>- "+element.luas+"<br>- "+kondisi+"</td><td style='width: 10%;'>- "+element.kepemilikan+"<br>- "+element.luas_tanah+"</td><td style='text-align: center;width: 1%;'>"+aktifitas+"</td><td>"+element.keterangan+"</td>");
+
+                if (element.luas) {
+                  var luas = element.luas;
+                }else{
+                  var luas = '';
+                }
+
+                if (element.keterangan) {
+                  var keterangan = element.keterangan;
+                }else{
+                  var keterangan = '';
+                }
+
+                if (element.luas_tanah) {
+                  var luas_tanah = element.luas_tanah;
+                }else{
+                  var luas_tanah = '';
+                }
+
+                if (element.kepemilikan) {
+                  var kepemilikan = element.kepemilikan;
+                }else{
+                  var kepemilikan = '';
+                }
+
+                
+
+                var ExplodeTanggalBuat = element.updated_at.split(' ');
+                var TanggalCreate = ExplodeTanggalBuat[0];
+                var ExplodeGetTanggalBuat = TanggalCreate.split('-');
+                var TanggalBuat = ExplodeGetTanggalBuat[2]+'-'+ExplodeGetTanggalBuat[1]+'-'+ExplodeGetTanggalBuat[0];
+
+                $('#tbody').append("<tr><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td>"+ element.nama +"</td><td>"+element.alamat+"<br>Kec. "+element.alamat_kec+"<br>Kel/Des. "+element.alamat_kel+"</td><td>- "+konstruksi+"<br>- "+luas+"<br>- "+kondisi+"</td><td style='width: 10%;'>- "+kepemilikan+"<br>- "+luas_tanah+"</td><td style='text-align: center;width: 1%;'>"+aktifitas+"</td><td>"+keterangan+"<br><span style='font-size: 11px;color: blue;'>Update Terakhir : <br></span><span style='font-size: 11px;color: blue;'>"+ TanggalBuat +", "+element.name+"</span></td>");
 
                   function getPageList(totalPages, page, maxLength) {
                     if (maxLength < 5) throw "maxLength must be at least 5";

@@ -37,6 +37,39 @@ div#ephox_mytextarea{
 
  </div>
 </div>
+
+<div class="form-group<?php echo e($errors->has('kd_kec') ? 'has-error' : ''); ?>">
+ <div class="row">
+   <?php echo Form::label('kd_kec', ' Kecamatan', ['class' => 'col-md-3 col-form-label']); ?>
+
+   <div class="col-md-3">
+     <div class="form-group">
+     <?php echo Form::select('kd_kec', $Kecamatan, null, ('required' == 'required') ? ['class' => 'form-control','onChange' => 'ChangeKecamatan()', 'required' => 'required'] : ['class' => 'form-control']); ?>
+
+     </div>
+   </div>
+   
+   <?php echo $errors->first('kd_kec', '<p class="help-block">:message</p>'); ?>
+
+ </div>
+</div>
+
+<div class="form-group<?php echo e($errors->has('kel_des') ? 'has-error' : ''); ?>">
+ <div class="row">
+   <?php echo Form::label('kel_des', ' Kelurahan/ Desa', ['class' => 'col-md-3 col-form-label']); ?>
+
+   <div class="col-md-3">
+     <div class="form-group">
+   <?php echo Form::select('kel_des',$kelurahan, null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
+
+     </div>
+   </div>
+   
+   <?php echo $errors->first('kel_des', '<p class="help-block">:message</p>'); ?>
+
+ </div>
+</div>
+
 <div class="form-group<?php echo e($errors->has('username') ? 'has-error' : ''); ?>">
  <div class="row">
    <?php echo Form::label('username', 'USER', ['class' => 'col-md-3 col-form-label']); ?>
@@ -90,3 +123,27 @@ div#ephox_mytextarea{
     </div>
   </div>
 </div>
+<script type="text/javascript">
+  $( document ).ready(function() {
+      $('#kd_kec').on('change', function(){
+        var stateID = $('#kd_kec').val();
+        if (stateID) {
+          $.ajax({
+            url: '/pelaporan/srcKelDes/'+stateID,
+            type: "GET",
+            dataType: "json",
+            success:function(data){
+              $('#kel_des').empty();
+              $('#kel_des').append("<option value=''>SELECT</option>");
+              $.each(data, function(key, value){
+                $('#kel_des').append("<option value="+ value +">"+ key +"</option>");
+              });
+            }
+          });
+        }else{
+          $('#kel_des').empty();
+          $('#kel_des').append("<option value=''>SELECT</option>");
+        }
+      });
+  });
+</script>

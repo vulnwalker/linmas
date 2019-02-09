@@ -94,7 +94,10 @@
                               <a class="nav-link" href="{{ url("jabatan/jabatan") }}" aria-expanded="false" style="color: red; font-weight: bold; padding-right: .2rem;">Jabatan |</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="{{ url("katLaporan/katLaporan") }}" aria-expanded="false" style="color: red; font-weight: bold;">Kategori Laporan</a>
+                              <a class="nav-link" href="{{ url("katLaporan/katLaporan") }}" aria-expanded="false" style="color: red; font-weight: bold; padding-right: .2rem;">Kategori Laporan |</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="{{ url("images/images") }}" aria-expanded="false" style="color: red; font-weight: bold;">Images</a>
                             </li>
                           </ul>
                         </div>
@@ -169,15 +172,10 @@
                         <div class="col-md-1">
                           <input type="number" name="jmlData" id="jmlData" class="form-control" style="width: 65px;" value="25">
                         </div>
-                        <div class="col-md-2">
-                          <button type="button" id="search" name="search" class="btn btn-info" onclick="search()">TAMPILKAN</button>
+                        <div class="col-md-1">
+                          <button type="button" id="search" name="search" class="btn btn-info" onclick="search()" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 5px;float: right;width: 100%;">TAMPILKAN</button>
                         </div>
                       </div>
-                      {{-- <div class="row">
-                        <div class="col-md-2">
-                          <button type="button" id="search" name="search" class="btn btn-primary" onclick="search()">TAMPILKAN</button>
-                        </div>
-                      </div> --}}
                       </div>
                     <div class="card-body" style="padding: 0px 15px 10px !important;">
                         <br/>

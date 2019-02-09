@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Sapras;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Exports\Sapras\SaprasExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Sapra;
 use App\JenisLinma;
@@ -14,6 +16,7 @@ use App\Wilayah;
 use App\JenisSapras;
 use Illuminate\Http\Request;
 use DB;
+use PDF;
 
 class SaprasController extends Controller
 {
@@ -22,6 +25,20 @@ class SaprasController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    
+    public function Export(Request $request)
+    {
+      $jns_sapras = $request->jns_sapras;
+      $kondisi = $request->kondisi;
+      $tahun = $request->tahun;
+      $keteranganItem = $request->keteranganItem;
+      $id_kecamatan = $request->id_kecamatan;
+      $id_kelurahan = $request->id_kelurahan;
+      $date = date('d-M-Y H-i-s');
+      return Excel::download(new SaprasExport($id_kecamatan,$id_kelurahan,$jns_sapras,$kondisi,$tahun,$keteranganItem), 'sapras'.$date.'.xlsx');
+
+    }
+
     public function index(Request $request)
     {
         $keyword = $request->get('search');
@@ -29,7 +46,7 @@ class SaprasController extends Controller
 
         $Kecamatan = Wilayah::where('kd_kel_des','00')->orderBy('nama', 'asc')->pluck('nama', 'kd_kec');
         $jenisSapras = JenisSapras::pluck('nama', 'id');
-        $jenisSapras->prepend('-- Semua Sapras --','0');
+        $jenisSapras->prepend('-- Semua Sapras --','');
         $Kecamatan->prepend('-- Kecamatan --','');
         $kelurahan = array('' => '-- Kelurahan / Desa --');
         if (!empty($keyword)) {
@@ -41,7 +58,39 @@ class SaprasController extends Controller
                 ->orWhere('kondisi', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $sapras = Sapra::select('sapras.*','jns_sapras.nama')->join('jns_sapras', 'sapras.jenis_sapras', '=', 'jns_sapras.id')->latest()->paginate($perPage);
+            $result = Sapra::select('sapras.*','jns_sapras.nama')->join('jns_sapras', 'sapras.jenis_sapras', '=', 'jns_sapras.id')->latest()->get();
+            if ($result == '[]') {
+              $sapras = Sapra::select('sapras.*','jns_sapras.nama')->join('jns_sapras', 'sapras.jenis_sapras', '=', 'jns_sapras.id')->latest()->get();
+            }else{
+              foreach ($result as $row){
+                  if (!empty($row->id_kecamatan)) {
+                      $queryKecamatan = Wilayah::where('kd_kec',$row->id_kecamatan)->where('kd_kel_des','00')->get();
+                      $namaKecamatan = $queryKecamatan[0]->nama;
+                  }else{
+                      $namaKecamatan = '';
+                  }
+                  
+                if($row->id_kecamatan != '' && $row->id_kelurahan !=''){
+                  $query = Wilayah::where('kd_kec',$row->id_kecamatan)->where('kd_kel_des',$row->id_kelurahan)->get();
+                  $namaKelurahan = $query[0]->nama;
+                }else{
+                  $namaKelurahan = '';
+                }
+
+                  $sapras[] = [
+                          'id' => $row->id,
+                          'id_kecamatan' => $namaKecamatan,
+                          'id_kelurahan' => $namaKelurahan,
+                          'nama' => $row->nama,
+                          'ket_item' => $row->ket_item,
+                          'keterangan' => $row->keterangan,
+                          'tahun' => $row->tahun,
+                          'kondisi' => $row->kondisi,
+                  ];
+              }
+            }
+
+
         }
 
         return view('sapras.sapras.index', compact('sapras','Kecamatan','kelurahan'), compact('sapras','Kecamatan','kelurahan','jenisSapras'));
@@ -192,17 +241,56 @@ class SaprasController extends Controller
     }
 
     public function srcSapras(Request $request){
-        $jns_sapras = $request->jns_sapras;
-        $id_kecamatan = $request->id_kecamatan;
-        $jns_sapras = $request->jns_sapras;
+        $jns_sapras         = $request->jns_sapras;
+        $id_kecamatan       = $request->id_kecamatan;
+        $jns_sapras         = $request->jns_sapras;
+        $kondisi            = $request->kondisi;
+        $tahun              = $request->tahun;
+        $keteranganItem     = $request->keteranganItem;
 
         $query= Sapra::select('sapras.*','jns_sapras.nama')->join('jns_sapras', 'sapras.jenis_sapras', '=', 'jns_sapras.id');
       
         if (!empty($id_kecamatan)) $query->where('sapras.id_kecamatan', "$id_kecamatan");
         if (!empty($id_kelurahan)) $query->where('sapras.id_kelurahan', "$id_kelurahan");
         if (!empty($jns_sapras)) $query->where('sapras.jenis_sapras', "$jns_sapras");
-        $sapras = $query->get();
+        if (!empty($kondisi)) $query->where('sapras.kondisi', "$kondisi");
+        if (!empty($tahun)) $query->where('sapras.tahun', "$tahun");
+        if (!empty($keteranganItem)) $query->where('sapras.ket_item', "like", "%$keteranganItem%");
 
+        $result = $query->get();
+        if ($result == '[]') {
+            $sapras = $query->get();
+        }else{
+        
+
+            foreach ($result as $row){
+                if (!empty($row->id_kecamatan)) {
+                    $queryKecamatan = Wilayah::where('kd_kec',$row->id_kecamatan)->where('kd_kel_des','00')->get();
+                    $namaKecamatan = $queryKecamatan[0]->nama;
+                }else{
+                    $namaKecamatan = '';
+                }
+                
+              if($row->id_kecamatan != '' && $row->id_kelurahan !=''){
+                $query = Wilayah::where('kd_kec',$row->id_kecamatan)->where('kd_kel_des',$row->id_kelurahan)->get();
+                $namaKelurahan = $query[0]->nama;
+              }else{
+                $namaKelurahan = '';
+              }
+
+                $sapras[] = [
+                        'id' => $row->id,
+                        'id_kecamatan' => $namaKecamatan,
+                        'id_kelurahan' => $namaKelurahan,
+                        'nama' => $row->nama,
+                        'ket_item' => $row->ket_item,
+                        'keterangan' => $row->keterangan,
+                        'tahun' => $row->tahun,
+                        'kondisi' => $row->kondisi,
+                ];
+            }
+
+        }
         return json_encode($sapras);
     }
 
@@ -235,12 +323,64 @@ class SaprasController extends Controller
             JenisSapras::where('id',$jenis_sapras )->update($StatusJenisSapras);
         }
 
-    }    
-        
-
-
-
+    }
         $arrayRespond = array('err' => $err, 'cek' => $cek );
         return json_encode($arrayRespond);
+    }
+
+    public function printData(Request $request)
+    {
+
+      $id_kecamatan     = $request->id_kecamatan;
+      $id_kelurahan     = $request->id_kelurahan;
+      $jns_sapras       = $request->jns_sapras;
+      $kondisi          = $request->kondisi;
+      $tahun            = $request->tahun;
+      $keteranganItem   = $request->keteranganItem;
+
+      $query = Sapra::select('sapras.*','jns_sapras.nama')->join('jns_sapras', 'sapras.jenis_sapras', '=', 'jns_sapras.id')->latest();
+
+      if (!empty($id_kecamatan) || $id_kecamatan != '') $query->where('sapras.id_kecamatan', $id_kecamatan);
+      if (!empty($id_kelurahan) || $id_kelurahan != '') $query->where('sapras.id_kelurahan', $id_kelurahan);
+      if ($jns_sapras != '')                            $query->where('sapras.jenis_sapras', "$jns_sapras");
+      if (!empty($kondisi))                             $query->where('sapras.kondisi', $kondisi);
+      if (!empty($tahun))                               $query->where('sapras.tahun','LIKE', "%$tahun%");
+      if (!empty($keteranganItem))                      $query->where('sapras.ket_item', "like", "%$keteranganItem%");
+
+      $result = $query->get();
+
+
+      $table = DB::table("wilayah");
+        if ($id_kecamatan != '0')  $table->where("kd_kec",$id_kecamatan);
+        $table->where("kd_kel_des", 00);
+        
+      $slcKec = $table
+                ->select("id","kd_prov","kd_kota_kab","kd_kec","kd_kel_des","nama")
+                ->get();
+
+      if ($id_kecamatan == 0) {
+        $kecamatan = "semua";
+      }else{
+        $kecamatan = $slcKec[0]->nama;
+      }
+
+      $table2 = DB::table("wilayah");
+        if ($id_kecamatan != '0')  $table2->where("kd_kec",$id_kecamatan);
+        if ($id_kelurahan != '0')  $table2->where("kd_kel_des",$id_kelurahan);
+        
+      $slcKelDes = $table2
+                ->select("id","kd_prov","kd_kota_kab","kd_kec","kd_kel_des","nama")
+                ->get();
+      if ($id_kelurahan == 0) {
+        $kelurahanDesa = "semua";
+      }else{
+        $kelurahanDesa = $slcKelDes[0]->nama;
+      }
+
+      $pdf = PDF::loadView('sapras.sapras.print', compact('result', 'kecamatan', 'kelurahanDesa'));
+      
+      return $pdf->setPaper('folio')->stream();
+
+      // return view('posJaga.pos-jaga.print', compact('posJaga'));
     }
 }

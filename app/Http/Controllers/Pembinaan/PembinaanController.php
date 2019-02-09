@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Pembinaan;
+use App\Exports\Pembinaan\PembinaanExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -13,6 +15,8 @@ use App\Jabatan;
 use App\TempPembinaan;
 use App\DetailPembinaan;
 use Auth;
+use DB;
+use PDF;
 class PembinaanController extends Controller
 {
     /**
@@ -20,6 +24,20 @@ class PembinaanController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    
+    public function Export(Request $request)
+    {
+      $tanggal_mulai = $request->tanggal_mulai;
+      $tanggal_selesai = $request->tanggal_selesai;
+      $nama = $request->nama;
+      $penyelengara = $request->penyelengara;
+      $lokasi = $request->lokasi;
+      $kegiatan = $request->kegiatan;
+      $date = date('d-M-Y H-i-s');
+      return Excel::download(new PembinaanExport($tanggal_mulai,$tanggal_selesai,$nama,$penyelengara,$lokasi,$kegiatan), 'PosJaga'.$date.'.xlsx');
+
+    }
+
     public function index(Request $request)
     {
         $keyword = $request->get('search');
@@ -115,7 +133,7 @@ class PembinaanController extends Controller
         // $requestData = $request->all();
         
         // Pembinaan::create($requestData);
-        
+        $users = Auth::user();
         $explodeTanggalMulai = explode('/',$request->input('tanggal_mulai'));
         $explodeTanggalSelesai = explode('/',$request->input('tanggal_selesai'));
         $pembinaan = new \App\Pembinaan;
@@ -126,25 +144,31 @@ class PembinaanController extends Controller
         $pembinaan->narasumber = $request->input('narasumber');
         $pembinaan->lokasi = $request->input('lokasi');
         $pembinaan->kegiatan = $request->input('kegiatan');
+        $pembinaan->user_id = $users->id;
         
         $pembinaan->save();
 
 
         $id_pembinaan = Pembinaan::max('id');
-        $users = Auth::user();
+        
         $query= TempPembinaan::select('temp_pembinaan.*');
-        $tempPembinaan = $query->where('id_user',$users->id)->get();
+        $CekTmp= TempPembinaan::max('id')->where('id_user',$users->id);
+        if($CekTmp != 0){
+          $tempPembinaan = $query->where('id_user',$users->id)->get();
 
-        foreach ($tempPembinaan as $row){
-            $detail_pembinaan[] = [
-                'id_linmas' => $row['id_linmas'],
-                'id_pembinaan' => $id_pembinaan,
-                'id_user' => $row['id_user'],
-            ];
+          foreach ($tempPembinaan as $row){
+              $detail_pembinaan[] = [
+                  'id_linmas' => $row['id_linmas'],
+                  'id_pembinaan' => $id_pembinaan,
+                  'id_user' => $row['id_user'],
+              ];
+          }
+
+         DetailPembinaan::insert($detail_pembinaan); 
+         TempPembinaan::where('id_user',$users->id)->forceDelete();
         }
 
-       DetailPembinaan::insert($detail_pembinaan); 
-       TempPembinaan::where('id_user',$users->id)->forceDelete();
+       
 
         return redirect('pembinaan/pembinaan')->with('flash_message', 'Pembinaan added!');
     }
@@ -227,7 +251,7 @@ class PembinaanController extends Controller
     {
         
         // $requestData = $request->all();
-        
+        $users = Auth::user();
         $pembinaan = Pembinaan::findOrFail($id);
 
         $explodeTanggalMulai = explode('/',$request->input('tanggal_mulai'));
@@ -236,15 +260,19 @@ class PembinaanController extends Controller
         $PembinaanUpdate = array(
             'nama' => $request->input('nama'),
             'penyelengara' => $request->input('penyelengara'),
+            'lokasi' => $request->input('lokasi'),
+            'kegiatan' => $request->input('kegiatan'),
+            'user_id' => $users->id,
             'tanggal_mulai' => $explodeTanggalMulai[2].'-'.$explodeTanggalMulai[0].'-'.$explodeTanggalMulai[1],
             'tanggal_selesai' => $explodeTanggalSelesai[2].'-'.$explodeTanggalSelesai[0].'-'.$explodeTanggalSelesai[1],
           );
 
 
-        $users = Auth::user();
+        
         $query= TempPembinaan::select('temp_pembinaan.*');
         $tempPembinaan = $query->where('id_user',$users->id)->get();
-
+        $CekTmp= TempPembinaan::where('id_user',$users->id)->max('id');
+        if($CekTmp != 0){
           foreach ($tempPembinaan as $row){
               $DetailPembinaanUpdate[] = [
                   'id_linmas' => $row['id_linmas'],
@@ -256,11 +284,12 @@ class PembinaanController extends Controller
           //   'id_kecamatan' => $request->input('id_kecamatan'),
           //   'id_kelurahan' => $request->input('id_kelurahan'),
           // );
-
-
-        Pembinaan::where('id', $id)->update($PembinaanUpdate);
         DetailPembinaan::where('id_pembinaan', $id)->where('id_user', $users->id)->forceDelete();
         DetailPembinaan::where('id_pembinaan', $id)->where('id_user', $users->id)->insert($DetailPembinaanUpdate);
+      }
+
+        Pembinaan::where('id', $id)->update($PembinaanUpdate);
+
         return redirect('pembinaan/pembinaan')->with('flash_message', 'Pembinaan updated!');
     }
 
@@ -327,6 +356,8 @@ class PembinaanController extends Controller
     {
       $nama = $request->nama;
       $penyelengara = $request->penyelengara;
+      $lokasi = $request->lokasi;
+      $kegiatan = $request->kegiatan;
       $tanggal_mulai = $request->tanggal_mulai;
       $tanggal_selesai = $request->tanggal_selesai;
       $dari = "";
@@ -345,6 +376,8 @@ class PembinaanController extends Controller
       
       if (!empty($nama)) $query->where('pembinaans.nama','LIKE', "%$nama%");
       if (!empty($penyelengara)) $query->where('pembinaans.penyelengara','LIKE', "%$penyelengara%");
+      if (!empty($lokasi)) $query->where('pembinaans.lokasi','LIKE', "%$lokasi%");
+      if (!empty($kegiatan)) $query->where('pembinaans.kegiatan','LIKE', "%$kegiatan%");
       if (!empty($tanggal_mulai) && empty($tanggal_selesai)){
         $query->where('tanggal_mulai','<=', $dari);
       } 
@@ -381,6 +414,37 @@ class PembinaanController extends Controller
     public function TambahPembinaan(){
            $users = Auth::user();
         TempPembinaan::where('id_user',$users->id)->forceDelete();
+    }
+
+    public function printData(Request $request)
+    {
+
+      $nama             = $request->nama;
+      $lokasi           = $request->lokasi;
+      $penyelengara     = $request->penyelengara;
+      $kegiatan         = $request->kegiatan;
+      $tanggal_mulai    = $request->tanggal_mulai;
+      $tanggal_selesai  = $request->tanggal_selesai;
+
+      $query= Pembinaan::select('pembinaans.*');
+      
+      if (!empty($nama))              $query->where('nama', 'like', "%$nama%");
+      if (!empty($lokasi))            $query->where('lokasi', 'like', "%$lokasi%");
+      if (!empty($penyelengara))      $query->where('penyelengara', 'like', "%$penyelengara%");
+      if (!empty($kegiatan))          $query->where('kegiatan', 'like', "%$kegiatan%");
+      if (!empty($tanggal_mulai) && empty($tanggal_selesai)){
+        $query->where('tanggal_mulai','<=', $tanggal_mulai);
+      } 
+      if (!empty($tanggal_mulai) && !empty($tanggal_selesai)){
+        $query->whereBetween('tanggal_mulai', [$tanggal_mulai, $tanggal_selesai]);
+      } 
+      $pembinaan = $query->get();
+
+      $pdf = PDF::loadView('pembinaan.pembinaan.print', compact('pembinaan'));
+      
+      return $pdf->setPaper('folio')->stream();
+
+      // return view('posJaga.pos-jaga.print', compact('posJaga'));
     }
 
 }

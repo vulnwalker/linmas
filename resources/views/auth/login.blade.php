@@ -24,21 +24,31 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
     <div class="container-fluid">
-      <div class="navbar-wrapper" style="width: 100%;">
-        <img src="{{asset('assets/images/logo-serang.png')}}">
+      {{-- <div class="navbar-wrapper" style="width: 100%;">
+        <div class="row">
+          <div class="col-md-6">
+            
+          </div>
+        </div>
+        <img src="{{asset('assets/images/linmas_logo_resize.png')}}">
         <img src="{{ asset('assets/images/aplukat kite.png') }}" style="width: 295px;" align="left">
         <a class="navbar-brand" href="#" style="padding-top: 0px; text-align: right; width: 100%; margin-right: 10px;">
           <img src="{{asset('assets/images/satpol pp.png')}}" style="width: 75px; height: 85px;">
         </a>
-        <a class="navbar-brand" href="#" style="padding-top: 0px;text-align: right;width: 38%;">
+        <a class="navbar-brand" href="#" style="padding-top: 0px;text-align: right;width: 38%; margin-right: 0px;">
           <img src="{{ asset('assets/images/alamat.png') }}" style="/* width: 75px; *//* height: 85px; */">
         </a>
+      </div> --}}
+      <div class="row" style="width: 100%;">
+          <div class="col-md-6">
+            <img src="{{ url('assets/images/linmas_logo_resize.png') }}">
+            <img src="{{ url('assets/images/aplukat kite.png') }}" style="width: 295px;">
+          </div>
+          <div class="col-md-6" style="text-align: right;">
+            <img src="{{ url('assets/images/satpol pp.png') }}" style="width: 75px;height: 85px;position: relative;top: 50%;transform: translateY(-50%);">
+            <img src="{{ url('assets/images/alamat.png') }}" style="position: relative;top: 45%;transform: translateY(-50%);">
+          </div>
       </div>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-      </button>
     </div>
   </nav>
   <!-- End Navbar -->
@@ -91,13 +101,20 @@
         </div>
       </div>
     </div>
-    <footer class="footer footer-black  footer-white ">
+    <footer class="footer footer-black  footer-white" style="padding-right: 16px; padding-left: 16px; padding-bottom: 0px; padding-bottom: 0px;">
         <div class="container-fluid">
           <div class="row">
-            <marquee style="font-size: 13px;">Copyright © 2018 Satuan Polisi Pamong Praja - Pemerintah Kabupaten Serang</marquee>
+            <div class="col-md-12">
+              <marquee style="font-size: 13px; position: relative; top: 50%; transform: translateY(-50%);">Copyright © 2018 Satuan Polisi Pamong Praja - Pemerintah Kabupaten Serang</marquee>
+            </div>
+            {{-- <div class="col-md-4" style="padding-left: 0px;">
+              <img src="{{ url('assets/images/logo alamat kab serang.png') }}">
+              <img src="{{ url('assets/images/logo-serang.png') }}">
+              <img src="{{ url('assets/images/alamat_kab_serang2nd.png') }}">
+            </div> --}}
           </div>
         </div>
-      </footer>
+    </footer>
   </div>
 
 

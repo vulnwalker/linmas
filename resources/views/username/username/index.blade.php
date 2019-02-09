@@ -3,10 +3,6 @@
   Data Username
 @endsection
 
-@section('judul')
-  Data Username
-@endsection
-
 @section('content')
 <style type="text/css">
   button.btn.dropdown-toggle.bs-placeholder.btn-default {
@@ -50,207 +46,206 @@ button#search {
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div id="loadingData"></div>
     <div class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                      @php
-                        if (Auth::user()->user == 1 || Auth::user()->user == 3) {
-                            $idUser     = "user";
-                            $hrefUser   = "";
-                            $class      = "user";
-                        }else{
-                            $idUser     = "";
-                            $hrefUser   = "href=/username/username/create";
-                            $class      = "";
-                        }
-                      @endphp
-                      <div class="row">
-                          <div class="col-md-6">
-                            <h4 class="card-title">Data Username</h4>
-                            <p class="card-category"></p>
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header">
+                    @php
+                      if (Auth::user()->user == 1 || Auth::user()->user == 3) {
+                          $idUser     = "user";
+                          $hrefUser   = "";
+                          $class      = "user";
+                      }else{
+                          $idUser     = "";
+                          $hrefUser   = "href=/username/username/create";
+                          $class      = "";
+                      }
+                    @endphp
+                    <div class="row">
+                        <div class="col-md-6">
+                          <h4 class="card-title">Data Username</h4>
+                          <p class="card-category"></p>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            {{-- <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btnPrint">
+                              <i class="fal fa-print"></i> Print
+                            </button> --}}
+                            <button class="btn btn-info pull-right" id="cari" data-toggle="modal" data-target="#noticeModal">
+                              <i class="fal fa-search"></i> CARI
+                            </button>
+                            <button class="btn btn-danger pull-right" id="hapus" name="hapus">
+                              <i class="fal fa-trash-alt"></i> Hapus
+                            </button>
+                            <button class="btn btn-warning pull-right" id="edit" name="edit">
+                              <i class="fal fa-pencil-alt"></i> Edit
+                            </button>
+                            <a {{ $hrefUser }} class="{{ $class }}">
+                              <button class="btn btn-success pull-right"><i class="fal fa-plus"></i> Baru</button>
+                            </a>
                           </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <button class="btn btn-info pull-right" id="cari" data-toggle="modal" data-target="#noticeModal"><i class="fal fa-search"></i> CARI</button>
-                              <button class="btn btn-danger pull-right" id="hapus" name="hapus"><i class="fal fa-trash-alt"></i> Hapus</button>
-                              <button class="btn btn-warning pull-right" id="edit" name="edit"><i class="fal fa-pencil-alt"></i> Edit</button>
-                              <a {{ $hrefUser }} class="{{ $class }}">
-                                <button class="btn btn-success pull-right"><i class="fal fa-plus"></i> Baru</button>
-                              </a>
-                            </div>
-                            <input type="hidden" name="hakAkses" id="hakAkses" value="{{ Auth::user()->user }}">
-                            <!-- notice modal -->
+                          <input type="hidden" name="hakAkses" id="hakAkses" value="{{ Auth::user()->user }}">
+                          <!-- notice modal -->
 
-                            <div class="modal fade bd-example-modal-lg" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
-                              <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
+                          <div class="modal fade bd-example-modal-lg" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
+                            <div class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
 
-                                  <div class="modal-header" style="text-align:left;display:inline-flex !important;">
-                                    <h5 class="modal-title" id="exampleModalLabel">Cari Data</h5>
-                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="row">
-                                      <div class="col-md-2">
-                                        <label class="control-label">USERNAME</label>
-                                      </div>
-                                      <div class="col-md-3">
-                                        <div class="form-group">
-                                          <input type="text" name="username" id="username" class="form-control">
-                                        </div>
-                                      </div>
-                                      <div class="col-md-1">
-                                        <label class="control-label">LEVEL</label>
-                                      </div>
-                                      <div class="col-md-3">
-                                        <div class="form-group">
-                                          <select class="form-control" id="level" name="level">
-                                            <option value="">SELECT</option>
-                                            <option value="1">ADMINISTRASI</option>
-                                            <option value="2">OPERATOR</option>
-                                          </select>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-1">
-                                        <label class="control-label">STATUS</label>
-                                      </div>
-                                      <div class="col-md-2">
-                                        <div class="form-group">
-                                          <select class="form-control" name="status" id="status">
-                                            <option value="">SELECT</option>
-                                            <option value="1">AKTIF</option>
-                                            <option value="2">TIDAK</option>
-                                          </select>
-                                        </div>
+                                <div class="modal-header" style="text-align:left;display:inline-flex !important;">
+                                  <h5 class="modal-title" id="exampleModalLabel">Cari Data</h5>
+                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="row">
+                                    <div class="col-md-2">
+                                      <label class="control-label">USERNAME</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                      <div class="form-group">
+                                        <input type="text" name="username" id="username" class="form-control">
                                       </div>
                                     </div>
-                                    <div class="row" style="margin-bottom: 1%;">
-                                      <div class="col-md-12">
-                                        <div style="margin-top: 1%;margin-left: 0px;margin-bottom: 3%;">
-                                          <button type="button" id="cari" name="cari" class="btn btn-info" onclick="search()">Cari</button>
-                                        </div>
+                                    <div class="col-md-1">
+                                      <label class="control-label">LEVEL</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                      <div class="form-group">
+                                        <select class="form-control" id="level" name="level">
+                                          <option value="">SELECT</option>
+                                          <option value="1">ADMINISTRASI</option>
+                                          <option value="2">OPERATOR</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                      <label class="control-label">STATUS</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                      <div class="form-group">
+                                        <select class="form-control" name="status" id="status">
+                                          <option value="">SELECT</option>
+                                          <option value="1">AKTIF</option>
+                                          <option value="2">TIDAK</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row" style="margin-bottom: 1%;">
+                                    <div class="col-md-12">
+                                      <div style="margin-top: 1%;margin-left: 0px;margin-bottom: 3%;">
+                                        <button type="button" id="cari" name="cari" class="btn btn-info" onclick="search()">Cari</button>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-
-                            {{-- end notice modal --}}
                           </div>
+                          {{-- end notice modal --}}
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <label class="control-label">NAMA KECAMATAN</label>
                       </div>
-                      <div class="row">
-                        <div class="col-md-2">
-                          <label class="control-label">NAMA KECAMATAN</label>
-                          {{-- <label class="control-label">KECAMATAN</label> --}}
-                        </div>
-                        <div class="col-md-2">
-                          {{-- <input type="text" name="kec_kel" id="kec_kel" class="form-control"> --}}
-                          <select class="form-control" id="kd_kec" name="kd_kec">
-                            <option value="0">SELECT</option>
-                            @foreach($slcKdKec as $value)
-                              <option value="{{ $value->kd_kec }}">{{ $value->nama }}</option>
-                            @endforeach
-                          </select>
-                        </div>
+                      <div class="col-md-2">
+                        <select class="form-control" id="kd_kec" name="kd_kec">
+                          <option value="0">SELECT</option>
+                          @foreach($slcKdKec as $value)
+                            <option value="{{ $value->kd_kec }}">{{ $value->nama }}</option>
+                          @endforeach
+                        </select>
                       </div>
-                      <div class="row">
-                        <div class="col-md-2">
-                          <label class="control-label">KELURAHAN / DESA</label>
-                        </div>
-                        <div class="col-md-2">
-                          <select class="form-control" id="kel_des" name="kel_des">
-                            <option value="0">SELECT</option>
-                          </select>
-                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <label class="control-label">KELURAHAN / DESA</label>
                       </div>
-                      <div class="row">
-                        <div class="col-md-2">
-                          <label class="control-label">JUMLAH DATA</label>
-                        </div>
-                        <div class="col-md-1">
-                          <input type="number" name="jmlData" id="jmlData" class="form-control" style="width: 65px;" value="25">
-                        </div>
-                        <div class="col-md-1">
-                          <button type="button" id="search" name="search" class="btn btn-info" onclick="search()">TAMPILKAN</button>
-                        </div>
+                      <div class="col-md-2">
+                        <select class="form-control" id="kel_des" name="kel_des">
+                          <option value="0">SELECT</option>
+                        </select>
                       </div>
-                      {{-- <div class="row">
-                        <div class="col-md-2">
-                          <button type="button" id="search" name="search" class="btn btn-primary" onclick="search()">TAMPILKAN</button>
-                        </div>
-                      </div> --}}
+                    </div>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <label class="control-label">JUMLAH DATA</label>
                       </div>
-                    <div class="card-body" style="padding: 0px 15px 10px !important;">
-                        <br/>
-                        <div >
-                          <table class="table table-striped table-bordered" cellspacing="0" width="100%">
-                            <thead>
-                              <tr>
-                                <th style="text-align:center; width: 3%;">NO</th>
-                                <th>
+                      <div class="col-md-1">
+                        <input type="number" name="jmlData" id="jmlData" class="form-control" style="width: 65px;" value="25">
+                      </div>
+                      <div class="col-md-1">
+                        <button type="button" id="search" name="search" class="btn btn-info" onclick="search()" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 5px;float: right;width: 100%;">TAMPILKAN</button>
+                      </div>
+                    </div>
+                    </div>
+                  <div class="card-body" style="padding: 0px 15px 10px !important;">
+                    <br/>
+                    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                      <thead>
+                        <tr>
+                          <th style="text-align:center; width: 3%;">NO</th>
+                          <th>
+                            <div class="form-check mt-3" style="padding: unset!important;">
+                              <div class="form-check" style="width: 1px; height: 36px; padding: unset!important;">
+                                <label class="form-check-label">
+                                  <input type="checkbox" id="select_all">
+                                  <span class="form-check-sign"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </th>
+                          <th>USERNAME</th>
+                          <th>LEVEL</th>
+                          <th>KECAMATAN</th>
+                          <th>KELURAHAN / DESA</th>
+                          <th>HAK AKSES</th>
+                          <th>STATUS</th>
+                        </tr>
+                      </thead>
+                          <tbody id="tbody">
+                            @foreach($slcUsers as $key=>$value)
+                              <tr id="{{ $value->id }}">
+                                <td style="text-align: center;">{{ ++$key }}</td>
+                                <td style="width: 3%;">
                                   <div class="form-check mt-3" style="padding: unset!important;">
                                     <div class="form-check" style="width: 1px; height: 36px; padding: unset!important;">
                                       <label class="form-check-label">
-                                        <input type="checkbox" id="select_all">
+                                        <input type="checkbox" class="checkbox" value="{{ $value->id }}">
                                         <span class="form-check-sign"></span>
                                       </label>
                                     </div>
                                   </div>
-                                </th>
-                                <th>USERNAME</th>
-                                <th>LEVEL</th>
-                                <th>KECAMATAN</th>
-                                <th>KELURAHAN / DESA</th>
-                                <th>HAK AKSES</th>
-                                <th>STATUS</th>
+                                </td>
+                                <td>{{ $value->email }}</td>
+                                @if($value->level == 1)
+                                  <td>ADMINISTRASI</td>
+                                  <td>Kec. {{ $value->nm_kec }}</td>
+                                  <td>Kel/Des. {{ $value->nm_kel_des }}</td>
+                                @else
+                                  <td>OPERATOR</td>
+                                  <td>Kec. {{ $value->nm_kec }}</td>
+                                  <td>Kel/Des. {{ $value->nm_kel_des }}</td>
+                                @endif
+                                
+                                <td>{{ $value->adminis }}.{{ $value->user }}.{{ $value->anggota }}.{{ $value->pengasahaan }}.{{ $value->pembinaan }}.{{ $value->posKamling }}.{{ $value->sapras }}.{{ $value->publikasi }}.{{ $value->pelaporan }}</td>
+                                @if($value->status == 1)
+                                  <td>AKTIF</td>
+                                @else
+                                  <td>TIDAK</td>
+                                @endif
                               </tr>
-                            </thead>
-                                <tbody id="tbody">
-                                  @foreach($slcUsers as $key=>$value)
-                                    <tr id="{{ $value->id }}">
-                                      <td style="text-align: center;">{{ ++$key }}</td>
-                                      <td style="width: 3%;">
-                                        <div class="form-check mt-3" style="padding: unset!important;">
-                                          <div class="form-check" style="width: 1px; height: 36px; padding: unset!important;">
-                                            <label class="form-check-label">
-                                              <input type="checkbox" class="checkbox" value="{{ $value->id }}">
-                                              <span class="form-check-sign"></span>
-                                            </label>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td>{{ $value->email }}</td>
-                                      @if($value->level == 1)
-                                        <td>ADMINISTRASI</td>
-                                        <td>{{ $value->nm_kec }}</td>
-                                        <td>{{ $value->nm_kel_des }}</td>
-                                      @else
-                                        <td>OPERATOR</td>
-                                        <td>{{ $value->nm_kec }}</td>
-                                        <td>{{ $value->nm_kel_des }}</td>
-                                      @endif
-                                      
-                                      <td>{{ $value->adminis }}.{{ $value->user }}.{{ $value->anggota }}.{{ $value->pengasahaan }}.{{ $value->pembinaan }}.{{ $value->posKamling }}.{{ $value->sapras }}.{{ $value->publikasi }}.{{ $value->pelaporan }}</td>
-                                      @if($value->status == 1)
-                                        <td>AKTIF</td>
-                                      @else
-                                        <td>TIDAK</td>
-                                      @endif
-                                    </tr>
-                                  @endforeach()
-                                </tbody>
-                            </table>
-                            <div class="pagination">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            @endforeach()
+                          </tbody>
+                      </table>
+                      <div class="pagination">
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
     </div>
 {{-- @include('linkJS') --}}
 <script src="{{asset('assets/js/core/jquery.min.js')}}"></script>
@@ -406,7 +401,7 @@ $(document).ready(function(){
             var status = "TIDAK";
           }
 
-          $('#tbody').append("<tr id="+ element.id +"><td style='text-align: center;'>"+ noColumn +"</td><td style='width: 3%;'><div class='form-check mt-3' style='padding: unset!important'><div class='form-check' style='width: 1px; height: 36px; padding: unset!important;'><label class='form-check-label'><input type='checkbox' class='checkbox' value="+ element.id +"><span class='form-check-sign'></span></label></div></div></td><td>"+ element.email +"</td><td>"+ level +"</td><td>"+ element.nm_kec +"</td><td>"+ element.nm_kel_des +"</td><td>"+ element.adminis +"."+ element.user +"."+ element.anggota +"."+ element.pengasahaan +"."+ element.pembinaan +"."+ element.posKamling +"."+ element.sapras +"."+ element.publikasi +"."+ element.pelaporan +"</td><td>"+ status +"</td></tr>");
+          $('#tbody').append("<tr id="+ element.id +"><td style='text-align: center;'>"+ noColumn +"</td><td style='width: 3%;'><div class='form-check mt-3' style='padding: unset!important'><div class='form-check' style='width: 1px; height: 36px; padding: unset!important;'><label class='form-check-label'><input type='checkbox' class='checkbox' value="+ element.id +"><span class='form-check-sign'></span></label></div></div></td><td>"+ element.email +"</td><td>"+ level +"</td><td>Kec. "+ element.nm_kec +"</td><td>Kel/Des. "+ element.nm_kel_des +"</td><td>"+ element.adminis +"."+ element.user +"."+ element.anggota +"."+ element.pengasahaan +"."+ element.pembinaan +"."+ element.posKamling +"."+ element.sapras +"."+ element.publikasi +"."+ element.pelaporan +"</td><td>"+ status +"</td></tr>");
 
             // start paginathing
             function getPageList(totalPages, page, maxLength) {

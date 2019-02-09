@@ -43,20 +43,22 @@
                             $idUser     = "pembinaan";
                             $hrefUser   = "";
                             $class      = "pembinaan";
+                            $onclik     = '';
                         }else{
                             $idUser     = "";
                             $hrefUser   = "href=/pembinaan/pembinaan/create";
+                            $onclik     = "onclick=TambahPembinaan()";
                             $class      = "";
                         }
                       ?>
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-8">
                             <h4 class="card-title">Data Pembinaan</h4>
                           <p class="card-category"></p>
                         </div>
-                        <div class="col-md-3" style="text-align:right;">
+                        <div class="col-md-4" style="text-align:right;">
                           
-                          <a  class="btn btn-success btn-sm <?php echo e($class); ?>" <?php echo e($hrefUser); ?> style="color:white;">
+                          <a  class="btn btn-success btn-sm <?php echo e($class); ?>" <?php echo e($onclik); ?> style="color:white;">
                               <i class="fal fa-plus"></i> Baru
                           </a>
                           <input type="hidden" name="hakAkses" id="hakAkses" value="<?php echo e(Auth::user()->pembinaan); ?>">
@@ -69,6 +71,76 @@
                           <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#btnSearch">
                             <i class="fal fa-search"></i> Cari
                           </button>
+
+                          <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#btnPrint">
+                            <i class="fal fa-print"></i> Print
+                          </button>
+
+                          <div class="modal fade bd-example-modal-lg" id="btnPrint" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
+                            <div class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
+
+                                <div class="modal-header" style="text-align:left;display:inline-flex !important;">
+                                  <h5 class="modal-title" id="exampleModalLabel">  <i class="fal fa-print"></i> Print Data / Export Excel</h5>
+                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                <div class="row">
+                                  <div class="col-md-3">
+                                    <label class="control-label">Tanggal</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="tanggal_mulai" id="tanggal_mulai_print" class="form-control datepicker">
+                                  </div>s/d
+                                  <div class="col-md-3">
+                                    <input type="text" name="tanggal_selesai" id="tanggal_selesai_print" class="form-control datepicker">
+                                  </div>
+                                </div>
+                                <div class="row" style="width: 104%;">
+                                  <div class="col-md-3">
+                                    <label class="control-label">Nama Kegiatan</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="nama" id="nama_print" class="form-control">
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label class="control-label">Lokasi Kegiatan</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="lokasi" id="lokasi_print" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-3">
+                                    <label class="control-label">Penyelenggaraan</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="penyelengara" id="penyelengara_print" class="form-control">
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label class="control-label">Isi Kegiatan</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="kegiatan" id="kegiatan_print" class="form-control">
+                                  </div>
+                                </div>
+
+
+                              <div class="row" style="margin-bottom: 1%;">
+                                <div class="col-md-12">
+                                  <div style="margin-top: 1%;margin-left: 0px;margin-bottom: 3%;">
+                                    <button onclick="PrintData()" id="search" class="btn btn-default btn-sm" style="margin:  0%;"> <i class="fal fa-print"></i> Print</button>
+                                    <button onclick="ExportExcel()" id="search" class="btn btn-success btn-sm" style="margin:  0%;"> <i class="fal fa-file-excel"></i> Export Excel</button>
+                                  </div>
+                                </div>
+                              </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
                         </div>
                     </div>
@@ -83,24 +155,13 @@
                             <span>Data/ halaman </span>
                           </div>
                           <div class="col-md-1">
-                            <input type="text" id="page" class="form-control" placeholder="25" value="<?php echo e(request('paging')); ?>" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 8%;">
+                            <input type="text" id="page" class="form-control" placeholder="25" value="<?php echo e(request('paging')); ?>" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;padding-right: 5px !important;">
 
                           </div>
                           <div class="col-md-2">
-                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: -3px;font-size: 11px;padding: 3px;">Tampilkan</button>
+                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;width: 100%;">Tampilkan</button>
                           </div>
                       </div>
-
-
-<!--                       <div class="row" style="margin-bottom: 1%;">
-                        <div class="col-md-2">
-                        </div>
-                        <div class="col-md-2">
-                          <div style="margin-top: 2%;margin-left: -2px;margin-bottom: 3% width: 100%;">
-                            
-                          </div>
-                        </div>
-                      </div> -->
 
                       </div>
                     </div>
@@ -118,7 +179,9 @@
                                               </label>
                                             </div>
                                         </th>
-                                        <th>Nama</th>
+                                        <th>Nama kegiatan</th>
+                                        <th>lokasi kegiatan</th>
+                                        <th>isi kegiatan</th>
                                         <th>Tanggal</th>
                                         <th>Penyelengara</th>
                                     </tr>
@@ -136,7 +199,9 @@
                                           </div>
                                       </td>
                                         <td><?php echo e($item->nama); ?></td>
-                                        <td><?php echo e($item->tanggal_mulai); ?> s/d <?php echo e($item->tanggal_selesai); ?></td>
+                                        <td><?php echo e($item->lokasi); ?></td>
+                                        <td><?php echo e($item->kegiatan); ?></td>
+                                        <td><?php echo e(date("d-m-Y", strtotime($item->tanggal_mulai))); ?> s/d <?php echo e(date("d-m-Y", strtotime($item->tanggal_selesai))); ?></td>
                                         <td><?php echo e($item->penyelengara); ?></td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -157,46 +222,46 @@
                             </div>
                             <div class="modal-body">
 
-                          <div class="row" style="width: 104%;">
-                          <div class="col-md-2">
-                            <span>Pembinaan</span>
-                          </div>
-                          <div class="col-md-5">
-                            <input type="text" id="nama" class="form-control"  style="font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 1%;">
-                          </div>
-                      </div>
+                                <div class="row">
+                                  <div class="col-md-3">
+                                    <label class="control-label">Tanggal</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="tanggal_mulai" id="tanggal_mulai" class="form-control datepicker">
+                                  </div>s/d
+                                  <div class="col-md-3">
+                                    <input type="text" name="tanggal_selesai" id="tanggal_selesai" class="form-control datepicker">
+                                  </div>
+                                </div>
+                                <div class="row" style="width: 104%;">
+                                  <div class="col-md-3">
+                                    <label class="control-label">Nama Kegiatan</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="nama" id="nama" class="form-control">
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label class="control-label">Lokasi Kegiatan</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="lokasi" id="lokasi" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-3">
+                                    <label class="control-label">Penyelenggaraan</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="penyelengara" id="penyelengara" class="form-control">
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label class="control-label">Isi Kegiatan</label>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <input type="text" name="kegiatan" id="kegiatan" class="form-control">
+                                  </div>
+                                </div>
 
-
-                      <div class="row">
-                          <div class="col-md-2">
-                            <span>Penyelengara</span>
-                          </div>
-                          <div class="col-md-5">
-                            <input type="text" id="penyelengara" class="form-control"  style="font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 1%;">
-                          </div>
-                      </div>
-
-                       <div class="row">
-                          <div class="col-md-2">
-                            <span>Tanggal</span>
-                          </div>
-                         <div class="col-md-2">
-                           <div class="form-group">
-                         <?php echo Form::text('tanggal_mulai', null, ('required' == 'required') ? ['id'=>'tanggal_mulai','class' => 'form-control datepicker', 'required' => 'required'] : ['class' => 'form-control']); ?>
-
-                         <?php echo $errors->first('tanggal_mulai', '<p class="help-block">:message</p>'); ?>
-
-                           </div>
-                         </div>s/d
-                         <div class="col-md-2">
-                           <div class="form-group">
-                         <?php echo Form::text('tanggal_selesai', null, ('required' == 'required') ? ['id'=>'tanggal_selesai','class' => 'form-control datepicker', 'required' => 'required'] : ['class' => 'form-control']); ?>
-
-                         <?php echo $errors->first('tanggal_selesai', '<p class="help-block">:message</p>'); ?>
-
-                           </div>
-                         </div>
-                       </div>
                           </div>
 
                           <div class="row" style="margin-bottom: 1%;">
@@ -374,12 +439,44 @@
 
  
   <script type="text/javascript">
+    function PrintData() {
+          var tanggalSelesai = $("#tanggal_selesai_print").val();
+          if (tanggalSelesai == "") {
+            // var today = new Date();
+            // var resultTanggalS = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var resultTanggalS = "";
+          }else{
+            var tanggalS = new Date($("#tanggal_selesai_print").val());
+            var resultTanggalS = tanggalS.getFullYear() + '-' + (tanggalS.getMonth() + 1) + '-' + tanggalS.getDate();
+          }
+
+          var tanggalMulai = $("#tanggal_mulai_print").val();
+          if (tanggalMulai == "") {
+            // var today = new Date();
+            // var resultTanggalM = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var resultTanggalM = "";
+          }else{
+            var tanggalM = new Date($("#tanggal_mulai_print").val());
+            var resultTanggalM = tanggalM.getFullYear() + '-' + (tanggalM.getMonth() + 1) + '-' + tanggalM.getDate();
+          }
+
+      window.open('/pembinaan/data/print?nama='+ $("#nama_print").val()+'&lokasi='+ $("#lokasi_print").val()+'&penyelengara='+ $("#penyelengara_print").val()+'&kegiatan='+$("#kegiatan_print").val()+'&tanggal_mulai='+resultTanggalM+'&tanggal_selesai='+resultTanggalS, '_blank');
+    }
+    function ExportExcel() {
+
+      
+      window.open('/pembinaan/export?nama='+ $("#nama_print").val()+'&lokasi='+ $("#lokasi_print").val()+'&penyelengara='+ $("#penyelengara_print").val()+'&kegiatan='+$("#kegiatan_print").val()+'&tanggal_mulai='+ $("#tanggal_mulai_print").val()+'&tanggal_selesai='+ $("#tanggal_selesai_print").val(),'_blank');
+    
+    }
+
      function searchData() {
           var jmlData = $('#page').val();
           $.ajax({
           url: '/pembinaan/refreshPembinaan',
             data: {
               nama: $("#nama").val(),
+              kegiatan: $("#kegiatan").val(),
+              lokasi: $("#lokasi").val(),
               tanggal_mulai: $("#tanggal_mulai").val(),
               tanggal_selesai: $("#tanggal_selesai").val(),
               penyelengara: $("#penyelengara").val(),
@@ -391,8 +488,31 @@
               var noColumn = 1;
               $.each(data, function(index, element){
 
-          
-                  $('#tbody').append("<tr ><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td>"+ element.nama +"</td><td>"+ element.tanggal_mulai +" s/d "+ element.tanggal_selesai +"</td><td>"+ element.penyelengara +"</td></tr>");
+                  var tanggalSelesai = element.tanggal_selesai;
+                  if (tanggalSelesai == "") {
+                    var resultTanggalS = "";
+                  }else{
+                    var tanggalS = new Date(element.tanggal_selesai);
+                    if (tanggalS.getDate() <= 9) {
+                      var resultTanggalS = '0'+tanggalS.getDate() + '-' + (tanggalS.getMonth() + 1) + '-' + tanggalS.getFullYear();
+                    }else{
+                      var resultTanggalS = tanggalS.getDate() + '-' + (tanggalS.getMonth() + 1) + '-' + tanggalS.getFullYear();
+                    }
+                  }
+
+                  var tanggalMulai = element.tanggal_mulai;
+                  if (tanggalMulai == "") {
+                    var resultTanggalM = "";
+                  }else{
+                    var tanggalM = new Date(element.tanggal_mulai);
+                    if (tanggalM.getDate() <= 9) {
+                      var resultTanggalM = '0'+ tanggalM.getDate() + '-' + (tanggalM.getMonth() + 1) + '-' + tanggalM.getFullYear();
+                    }else{
+                      var resultTanggalM = tanggalM.getDate() + '-' + (tanggalM.getMonth() + 1) + '-' + tanggalM.getFullYear();
+                    }
+                  }
+
+                  $('#tbody').append("<tr ><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td>"+ element.nama +"</td><td>"+element.lokasi+"</td><td>"+element.kegiatan+"</td><td>"+ resultTanggalM +" s/d "+ resultTanggalS +"</td><td>"+ element.penyelengara +"</td></tr>");
                   // start paginathing
                   function getPageList(totalPages, page, maxLength) {
                     if (maxLength < 5) throw "maxLength must be at least 5";

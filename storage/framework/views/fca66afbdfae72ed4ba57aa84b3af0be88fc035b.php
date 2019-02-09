@@ -52,7 +52,7 @@
 
   <div class="col-md-4">
     <div class="form-group">
-      <?php echo Form::text('penyelengara', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
+      <?php echo Form::text('penyelengara', null, ('required' == 'required') ? ['class' => 'form-control'] : ['class' => 'form-control']); ?>
 
     </div>
   </div>
@@ -66,7 +66,7 @@
 
   <div class="col-md-4">
     <div class="form-group">
-      <?php echo Form::textarea('kegiatan', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
+      <?php echo Form::textarea('kegiatan', null, ('required' == 'required') ? ['class' => 'form-control'] : ['class' => 'form-control']); ?>
 
     </div>
   </div>
@@ -86,5 +86,4 @@
   <?php echo $errors->first('narasumber', '<p class="help-block">:message</p>'); ?>
 
  </div> -->
-
 

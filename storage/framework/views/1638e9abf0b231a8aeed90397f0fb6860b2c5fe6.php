@@ -24,7 +24,6 @@
 <script src="<?php echo e(asset('assets/demo/jquery.sharrre.js')); ?>"></script>
 <script src="<?php echo e(asset('buttons.js')); ?>"></script>
 <script src="<?php echo e(asset('assets/js/mask.js')); ?>"></script>
-<script src="<?php echo e(asset('assets/js/paginathing.js')); ?>"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
 <!-- Place this tag in your head or just before your close body tag. -->
 

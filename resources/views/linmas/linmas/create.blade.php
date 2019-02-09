@@ -32,7 +32,7 @@
                             </ul>
                         @endif
 
-                        {!! Form::open(['url' => '/linmas/linmas', 'class' => 'form-horizontal', 'files' => true]) !!}
+                        {!! Form::open(['url' => '/linmas/linmas', 'class' => 'form-horizontal', 'id' => 'simpan', 'files' => true]) !!}
 
                         @include ('linmas.linmas.form', ['formMode' => 'create'])
 

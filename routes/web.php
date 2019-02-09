@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+date_default_timezone_set('Asia/Jakarta');
 Route::auth();
 
 Route::get('/', function () {
@@ -39,6 +40,18 @@ Route::group(['roles' => 'admin'], function () {
    Route::get('/wilayah/srcWilayah/', 'Wilayah\\WilayahController@srcWilayah');
    Route::get('/wilayah/delWilayah', 'Wilayah\\WilayahController@delWilayah');
    Route::get('/wilayah/srcKelDes/{id}', 'Wilayah\\WilayahController@srcKelDes');
+
+   Route::resource('usersLogin/usersLogin', 'UsersLogin\\UsersLoginController');
+   Route::get('usersLogin/srcUsersLogin', 'UsersLogin\\UsersLoginController@srcUsersLogin');
+
+   Route::resource('images/images', 'Images\\ImagesController');
+   // Route::post('images/uploadImages', 'Images\\ImagesController@uploadImages');
+   Route::post('images/images-save', 'Images\\ImagesController@store');
+   Route::get('images/srcImages', 'Images\\ImagesController@srcImages');
+   Route::get('images/editImages', 'Images\\ImagesController@editImages');
+   Route::get('images/delImages', 'Images\\ImagesController@delImages');
+   Route::post('images-delete', 'Images\\ImagesController@destroy');
+   // Route::get('/images-show', 'Images\\ImagesController@index');
 
    Route::resource('publikasi/publikasi', 'Publikasi\\PublikasiController');
    Route::get('/publikasi/insPublikasi/', 'Publikasi\\PublikasiController@insPublikasi');
@@ -83,6 +96,8 @@ Route::group(['roles' => 'admin'], function () {
 
    Route::get('/gantiPass/gantiPass/{id}/edit/', 'GantiPass\\GantiPassController@edit');
    Route::get('/gantiPass/editPassword/', 'GantiPass\\GantiPassController@gantiPassword');
+   Route::get('/user/loginSuccess/', 'GantiPass\\GantiPassController@loginSuccess');
+   Route::get('/user/logoutSuccess/', 'GantiPass\\GantiPassController@logoutSuccess');
 
    Route::resource('adminis/adminis', 'Adminis\\AdminisController');
    Route::get('/adminis/srcKd_kelDes/{id}', 'Adminis\\AdminisController@srcKd_kelDes');
@@ -126,6 +141,8 @@ Route::group(['roles' => 'admin'], function () {
    Route::resource('linmas/linmas', 'Linmas\\LinmasController');
    Route::get('linmas/refreshTable', 'Linmas\\LinmasController@refreshTable');
    Route::get('linmas/Delete', 'Linmas\\LinmasController@DeleteLinmas');
+   Route::get('linmas/export', 'Linmas\\LinmasController@Export');
+   Route::get('linmas/data/print', 'Linmas\\LinmasController@printData');
    //Route For Lokasi
    // Route::resource('lokasi/lokasi', 'Lokasi\\LokasiController');
 
@@ -143,6 +160,8 @@ Route::group(['roles' => 'admin'], function () {
    Route::resource('posJaga/pos-jaga', 'PosJaga\\PosJagaController');
    Route::get('posJaga/refreshTable', 'PosJaga\\PosJagaController@refreshTable');
    Route::get('posJaga/Delete', 'PosJaga\\PosJagaController@DeletePosJaga');
+   Route::get('posJaga/export', 'PosJaga\\PosJagaController@Export');
+   Route::get('posJaga/data/print', 'PosJaga\\PosJagaController@printData');
 
    Route::resource('Pengesahan/Pengesahan', 'Pengesahan\\PengesahanController');
    Route::get('tambah/no-sk', 'Pengesahan\\PengesahanController@TambahSk');
@@ -153,10 +172,14 @@ Route::group(['roles' => 'admin'], function () {
    Route::get('pengesahan/Batalkan', 'Pengesahan\\PengesahanController@PengesahanBatalkan');
    Route::get('pengesahan/getKode', 'Pengesahan\\PengesahanController@PengesahanGetKode');
    Route::get('pengesahan/getPengesahan', 'Pengesahan\\PengesahanController@GetPengesahan');
+   Route::get('pengesahan/checkCard', 'Pengesahan\\PengesahanController@checkCard');
+   Route::get('linmas/card/{id}', 'Pengesahan\\PengesahanController@cardPrint');
    
    Route::resource('sapras/sapras', 'Sapras\\SaprasController');
    Route::get('sapras/srcSapras', 'Sapras\\SaprasController@srcSapras');
    Route::get('sapras/delSapras', 'Sapras\\SaprasController@delSapras');
+   Route::get('sapras/data/print', 'Sapras\\SaprasController@printData');
+   Route::get('sapras/export', 'Sapras\\SaprasController@Export');
    
 
    Route::resource('pembinaan/pembinaan', 'Pembinaan\\PembinaanController');
@@ -170,6 +193,8 @@ Route::group(['roles' => 'admin'], function () {
    Route::get('pembinaan/Delete', 'Pembinaan\\PembinaanController@DeletePembinaan');
    Route::get('pembinaan/refreshPembinaan', 'Pembinaan\\PembinaanController@refreshPembinaan');
    Route::get('pembinaan/editTmp', 'Pembinaan\\PembinaanController@editTmp');
+   Route::get('pembinaan/data/print', 'Pembinaan\\PembinaanController@printData');
+   Route::get('pembinaan/export', 'Pembinaan\\PembinaanController@Export');
 
 
 
@@ -183,12 +208,22 @@ Route::group(['roles' => 'admin'], function () {
    Route::get('pelaporan/Delete', 'Pelaporan\\PelaporansController@DeletePelaporan');
    Route::get('pelaporan/srcContent', 'Pelaporan\\PelaporansController@srcContent');
    Route::get('pelaporan/PDF/{id}', 'Pelaporan\\PelaporansController@PDF');
+   Route::get('pelaporan/srcKelDes/{id}', 'Pelaporan\\PelaporansController@srcKelDes');
+
+   Route::get('bantuan/linmas', function () {
+    return view('bantuan/bantuan');
+});
 
 });
 
-Route::resource('admin/roles', 'Admin\RolesController');
-Route::resource('admin/permissions', 'Admin\PermissionsController');
-Route::resource('admin/users', 'Admin\UsersController');
+// Route::resource('admin/roles', 'Admi\RolesController');
+// Route::resource('admin/permissions', 'Admin\PermissionsController');
+// Route::resource('admin/users', 'Admin\UsersController');
 
+
+// Route::get('404',['as'=>'404','uses'=>'ErrorHandlerController@errorCode404']);
+// Route::get('500',['as'=>'500','uses'=>'ErrorHandlerController@errorCode404']);
+
+// Route::get('405',['as'=>'405','uses'=>'ErrorHandlerController@errorCode405']);
 
 

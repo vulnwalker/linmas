@@ -5,17 +5,16 @@ namespace App\Http\Controllers\Username;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Username;
-
-// use App\Kelurahan;
-// use App\Kecamatan;
 use Illuminate\Http\Request;
 use DB;
+use PDF;
 
 class UsernameController extends Controller{
 
     public function index(Request $request){
         $slcUsers = DB::table("users")
                  ->select("id","email","level","adminis","user","anggota","pengasahaan","pembinaan","posKamling","sapras","publikasi","pelaporan","status","kd_kec","kel_des","nm_kec","nm_kel_des")
+                 ->latest()
                  ->get();
         $slcKdKec = DB::table("wilayah")
                 ->where("kd_kel_des", 00)
@@ -327,7 +326,7 @@ class UsernameController extends Controller{
         if (!empty($kd_kec))    $table->where("kd_kec",$kd_kec);
         if (!empty($kel_des))    $table->where("kel_des",$kel_des);
         
-        $result = $table->select("id","email","level","adminis","user","anggota","pengasahaan","pembinaan","posKamling","sapras","publikasi","pelaporan","status","nm_kec","nm_kel_des")->get();
+        $result = $table->select("id","email","level","adminis","user","anggota","pengasahaan","pembinaan","posKamling","sapras","publikasi","pelaporan","status","nm_kec","nm_kel_des")->latest()->get();
         return json_encode($result);
     }
 

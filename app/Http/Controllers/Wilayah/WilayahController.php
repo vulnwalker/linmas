@@ -16,6 +16,7 @@ class WilayahController extends Controller
     public function index(Request $request){
         $slcWilayah = DB::table("wilayah")
                 ->select("id","kd_prov","kd_kota_kab","kd_kec","kd_kel_des","nama")
+                ->orderBy('nama', 'asc')
                 ->get();
 
         $slcKdKec = DB::table("wilayah")
@@ -94,6 +95,7 @@ class WilayahController extends Controller
         $result = $table
                 ->select("id","kd_prov","kd_kota_kab","kd_kec","kd_kel_des","nama")
                 ->orderBy('nama', 'asc')
+                // ->latest()
                 ->get();
         return json_encode($result);
     }

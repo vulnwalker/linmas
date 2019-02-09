@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Pelaporan;
+use App\Wilayah;
 use Illuminate\Http\Request;
 use DB;
 use PDF;
@@ -26,7 +27,22 @@ class PelaporansController extends Controller{
             $Pelaporan = Pelaporan::latest()->paginate($perPage);
         }
 
-        return view('pelaporan.pelaporans.index', compact('Pelaporan'));
+        $slcKdKec = DB::table("wilayah")
+                ->where("kd_kel_des", 00)
+                ->select("kd_kec","nama")
+                ->orderBy('nama', 'asc')
+                ->get();
+
+        return view('pelaporan.pelaporans.index', compact('Pelaporan', 'slcKdKec'));
+    }
+
+    public function srcKelDes($kd_kec){
+      $option = DB::table("wilayah")
+                  ->where("kd_kec",$kd_kec)
+                  ->where("kd_kel_des", "!=", 00)
+                  ->orderBy('nama', 'asc')
+                  ->pluck("kd_kel_des","nama");
+      return json_encode($option);
     }
 
     /**
@@ -38,7 +54,12 @@ class PelaporansController extends Controller{
         $slcLaporan = DB::table("kategori_laporan")
                  ->pluck("nama","id");
         $slcLaporan->prepend('-- SELECT --','');
-        return view('pelaporan.pelaporans.create', compact('slcLaporan'));
+
+        $Kecamatan = Wilayah::where('kd_kel_des','00')->orderBy('nama', 'asc')->pluck('nama', 'kd_kec');
+        $Kecamatan->prepend('-- Semua Kecamatan --','0');
+
+        $kelurahan = array('0' => '-- Semua Kelurahan/ Desa --');
+        return view('pelaporan.pelaporans.create', compact('slcLaporan', 'Kecamatan', 'kelurahan'));
     }
 
     /**
@@ -83,7 +104,14 @@ class PelaporansController extends Controller{
         $slcLaporan = DB::table("kategori_laporan")
                  ->pluck("nama","id");
         $slcLaporan->prepend('-- SELECT --','');
-        return view('pelaporan.pelaporans.edit', compact('pelaporan','slcLaporan'));
+        $contentpublikasi = ContentPublikasi::findOrFail($id);
+
+        $Kecamatan = Wilayah::all()->sortBy('nama', SORT_NATURAL | SORT_FLAG_CASE)->where('kd_kel_des','00')->pluck('nama', 'kd_kec');
+        $Kecamatan->prepend('','0');
+
+        $kelurahan = Wilayah::all()->sortBy('nama', SORT_NATURAL | SORT_FLAG_CASE)->where('kd_kec',$contentpublikasi->kd_kec)->where('kd_kec','!=','0')->where('kd_kel_des','!=','0')->pluck('nama', 'kd_kel_des');
+        $kelurahan->prepend('-- Semua Kelurahan/ Desa --','0');
+        return view('pelaporan.pelaporans.edit', compact('pelaporan','slcLaporan', 'Kecamatan', 'kelurahan'));
     }
 
     /**
@@ -138,13 +166,17 @@ class PelaporansController extends Controller{
     }
 
     public function srcContent(Request $request){
-        $nama   = $request->nama;
-        $judul  = $request->judul;
-        $user   = $request->user;
+        $nama       = $request->nama;
+        $judul      = $request->judul;
+        $user       = $request->user;
+        $kd_kec     = $request->kd_kec;
+        $kel_des    = $request->kel_des;
 
         $table = DB::table("pelaporans");
         if (!empty($judul))  $table->where("judul", "like", "%$judul%");
         if (!empty($user))  $table->where("username", "like", "%$user%");
+        if (!empty($kd_kec))  $table->where("kd_kec", "like", "%$kd_kec%");
+        if (!empty($kel_des))  $table->where("kel_des", "like", "%$kel_des%");
         
         $result = $table->select('pelaporans.*')->get();
         return json_encode($result);

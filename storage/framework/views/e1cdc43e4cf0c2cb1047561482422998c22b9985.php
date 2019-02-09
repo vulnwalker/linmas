@@ -77,9 +77,22 @@
         a.bg-crimson.fg-white.tile-wide:hover{
             background-color: #8a8a8a!important;
         }
+        td{
+        	padding: 10px!important;
+        }
+        .pagination .page-item{
+            border: unset;
+        }
+        .pagination .page-item:hover, .pagination .page-item.service:hover {
+            background-color: unset;
+        }
+        .pagination .page-item.active{
+            background-color: unset;
+        }
     </style>
 </head>
 <body class="bg-dark fg-white" style="background-image: url(<?php echo e(asset('assets/images/argyle.png')); ?>)">
+
     <?php if(Auth::user()->status == 2): ?>
     <script src="<?php echo e(asset('assets/js/jquery-3.3.1.min.js')); ?>"></script>
     <script type="text/javascript">
@@ -97,11 +110,11 @@
       <?php echo csrf_field(); ?>
     </form>
     <?php else: ?>
+
     <div class="container-fluid start-screen no-overflow">
         <div class="grid" style="margin-bottom: 3rem;">
             <div class="row" style="margin-top: 2rem; width: 1285px;">
                 <div class="cell-12" style="padding-right: 0px; padding-left: 0px;">
-                    
                     <img src="<?php echo e(asset('assets/images/linmas_logo_resize.png')); ?>" style="margin-top: 19px;" align="left">
                     <img src="<?php echo e(asset('assets/images/aplukat kite.png')); ?>" style="width: 295px;" align="left">
                     <img src="<?php echo e(asset('assets/images/alamat.png')); ?>" style="margin-top: 24px; margin-left: 10px;" align="right">
@@ -204,11 +217,10 @@
 
             <div class="tiles-grid tiles-group size-2 fg-white">
                 <div data-role="tile" data-size="large" data-effect="animate-slide-left" style="cursor: default;">
-                    <div class="slide" data-cover="<?php echo e(asset('assets/images/Linmas.jpg')); ?>"></div>
-                    <div class="slide" data-cover="<?php echo e(asset('assets/images/Linmas2.jpg')); ?>"></div>
-                    <div class="slide" data-cover="<?php echo e(asset('assets/images/Linmas3.jpg')); ?>"></div>
-                    <div class="slide" data-cover="<?php echo e(asset('assets/images/Linmas4.jpg')); ?>"></div>
-                    <div class="slide" data-cover="<?php echo e(asset('assets/images/Linmas5.jpg')); ?>"></div>
+                    <?php $__currentLoopData = $slcUploads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="slide" data-cover="<?php echo e(url('assets/images/upload',$value->filename)); ?>" style="background-image: url(<?php echo e(url('assets/images/upload',$value->filename)); ?>); background-size: cover; background-repeat: no-repeat; z-index: 1; left: 0px;"></div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    
                     <span class="branding-bar">Gallery</span>
                 </div>
             </div>
@@ -242,7 +254,7 @@
                     <img src="<?php echo e(asset('assets/images/ganti password.png')); ?>" class="icon" style="max-width: 70%; height: 70%;">
                     <span class="branding-bar">GANTI PASSWORD</span>
                 </a>
-                <a href="<?php echo e(url('/logout')); ?>" onclick="event.preventDefault();document.getElementById('logout-form').submit();" data-role="tile" data-size="medium" class="bg-grayBlue fg-white">
+                <a onclick="logoutSuccess()" data-role="tile" data-size="medium" class="bg-grayBlue fg-white">
                     <img src="<?php echo e(asset('assets/images/logout white.png')); ?>" class="icon" style="max-width: 80%; height: 80%;">
                     <span class="branding-bar">LOGOUT</span>
                 </a>
@@ -250,7 +262,83 @@
                   <?php echo csrf_field(); ?>
                 </form>
             </div>
-            <marquee style="margin-right: 0.8%; font-size: 13px;">Copyright © 2018 Satuan Polisi Pamong Praja - Pemerintah Kabupaten Serang</marquee>
+            <p style="color: transparent; cursor: help;">
+            	hmmm.. you found me....
+            </p>
+            <div class="grid">
+                <div class="row" style="width: 1285px;">
+                    <div class="cell-12" style="text-align: center;">
+                        <img src="<?php echo e(asset('assets/images/logo alamat kab serang.png')); ?>"> | <a href="<?php echo e(url('usersLogin/usersLogin')); ?>" target="_blank" style="cursor: pointer; color: white;">
+                            Users Online : <span id="countLogin" name="countLogin"></span>
+                        </a> | <a href="/bantuan/linmas" target="_blank" style="cursor: pointer;color: white;"> Bantuan </a>
+                    </div>
+                </div>
+	            <div class="row" style="width: 1285px;">
+	            	<div class="cell-12">
+	            		<marquee style="font-size: 13px; position: relative; top: 50%; transform: translateY(-50%);">Copyright © 2018 Satuan Polisi Pamong Praja - Pemerintah Kabupaten Serang</marquee>
+	            	</div>
+                    
+	            </div>
+	        </div>
+
+		        <!-- notice modal -->
+            <div class="modal fade" id="listUsersLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-notice" style="width: 1000px; height: 400px;">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      <i class="nc-icon nc-simple-remove"></i>
+                    </button>
+                    <h5 class="modal-title" id="myModalLabel" style="color: black;"><i class="nc-icon nc-key-25" style="color: black; margin-right: 10px;"></i>Users Login</h5>
+                  </div>
+                  <div class="modal-body">
+                    <div class="instruction">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <table  class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                              <tr>
+	                              <th style="text-align: center;width: 0%;line-height: 40px;">NO</th>
+	                              <th>NAMA</th>
+	                              <th>KECAMATAN</th>
+	                              <th>KELURAHAN / DESA</th>
+	                              <td>TANGGAL LOGIN</td>
+	                              <td>TANGGAL LOGOUT</td>
+                              </tr>
+                            </thead>
+                          	<tbody id="tbody">
+                          		<?php $__currentLoopData = $slcUserLogin; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                      			   <tr id="<?php echo e($value->id); ?>">
+                                      <td style="text-align: center;"><?php echo e(++$key); ?></td>
+                                      <td style="width: 3%; display: none;">
+                                        <div class="form-check mt-3" style="padding: unset!important;">
+                                          <div class="form-check" style="width: 1px; height: 36px; padding: unset!important;">
+                                            <label class="form-check-label">
+                                              <input type="checkbox" class="checkbox" value="<?php echo e($value->id); ?>">
+                                              <span class="form-check-sign"></span>
+                                            </label>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td><?php echo e($value->nama); ?></td>
+                                      <td><?php echo e($value->nm_kec); ?></td>
+                                      <td><?php echo e($value->nm_kel_des); ?></td>
+                                      <td><?php echo e(date("d-m-Y H:i:s", strtotime($value->login))); ?></td>
+                                      <td><?php echo e(date("d-m-Y H:i:s", strtotime($value->logout))); ?></td>
+                                    </tr>
+                          		<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                          	</tbody>
+                          </table>
+                            <div class="pagination">
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end notice modal -->
 
             <!-- notice modal -->
             <div class="modal fade" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -269,6 +357,11 @@
                           <strong>Password Lama</strong>
                           <input type="text" name="password" id="password" class="form-control" readonly="readonly" value="<?php echo e(Auth::user()->password2nd); ?>">
                           <input type="hidden" name="id" id="id" value="<?php echo e(Auth::user()->id); ?>">
+                          <input type="hidden" name="nama" id="nama" value="<?php echo e(Auth::user()->name); ?>">
+                          <input type="hidden" name="kd_kec" id="kd_kec" value="<?php echo e(Auth::user()->kd_kec); ?>">
+                          <input type="hidden" name="kel_des" id="kel_des" value="<?php echo e(Auth::user()->kel_des); ?>">
+                          <input type="hidden" name="nm_kec" id="nm_kec" value="<?php echo e(Auth::user()->nm_kec); ?>">
+                          <input type="hidden" name="nm_kel_des" id="nm_kel_des" value="<?php echo e(Auth::user()->nm_kel_des); ?>">
                         </div>
                       </div>
                     </div>
@@ -288,14 +381,7 @@
               </div>
             </div>
             <!-- end notice modal -->
-        </div>
-        <div class="grid">
-            <div class="row" style="width: 1285px;">
-                <div class="cell-12" style="padding-right: 0px; padding-left: 0px;">
-                	<img src="<?php echo e(url('assets/images/alamat kab serang.png')); ?>" align="right">
-                  <img src="<?php echo e(url('assets/images/logo-serang.png')); ?>" align="right">
-                </div>
-            </div>
+
         </div>
     </div>
     <script src="<?php echo e(asset('assets/js/jquery-3.3.1.min.js')); ?>"></script>
@@ -335,6 +421,27 @@
     </script>
 <script type="text/javascript">
     $(document).ready(function(){
+
+    	// login list
+    	$.ajax({
+          url: '/user/loginSuccess/',
+            data: {
+              id: 			$("#id").val(),
+              nama: 		$("#nama").val(),
+              kd_kec:       $("#kd_kec").val(),
+              kel_des:      $("#kel_des").val(),
+              nm_kec: 	    $("#nm_kec").val(),
+              nm_kel_des:   $("#nm_kel_des").val()
+            },
+            type: "GET",
+            success:function(data){
+              var resp = eval('(' + data + ')');
+              document.getElementById("countLogin").innerHTML = resp.countLogin;
+              // alert(resp.content);
+            }
+        });
+    	// End login list
+
       $('#gantiPass').on('click', function(){
         if ($("#passwordBaru").val() == "") {
           demo.showNotification('top','right','Password Baru Tidak Boleh Kosong');
@@ -361,8 +468,123 @@
           });
         }
       });
+
+    function getPageList(totalPages, page, maxLength) {
+      if (maxLength < 5) throw "maxLength must be at least 5";
+
+      function range(start, end) {
+          return Array.from(Array(end - start + 1), (_, i) => i + start); 
+      }
+
+      var sideWidth = maxLength < 9 ? 1 : 2;
+      var leftWidth = (maxLength - sideWidth*2 - 1) >> 1;
+      var rightWidth = (maxLength - sideWidth*2 - 2) >> 1;
+      if (totalPages <= maxLength) {
+          // no breaks in list
+          return range(1, totalPages);
+      }
+      if (page <= maxLength - sideWidth - 1 - rightWidth) {
+          // no break on left of page
+          return range(1, maxLength-sideWidth-1)
+              .concat([0])
+              .concat(range(totalPages-sideWidth+1, totalPages));
+      }
+      if (page >= totalPages - sideWidth - 1 - rightWidth) {
+          // no break on right of page
+          return range(1, sideWidth)
+              .concat([0])
+              .concat(range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+      }
+      // Breaks on both sides
+      return range(1, sideWidth)
+          .concat([0])
+          .concat(range(page - leftWidth, page + rightWidth)) 
+          .concat([0])
+          .concat(range(totalPages-sideWidth+1, totalPages));
+    }
+
+    $(function () {
+      // Number of items and limits the number of items per page
+      var numberOfItems = $("#tbody tr").length;
+      var limitPerPage = 10;
+      // Total pages rounded upwards
+      var totalPages = Math.ceil(numberOfItems / limitPerPage);
+      // Number of buttons at the top, not counting prev/next,
+      // but including the dotted buttons.
+      // Must be at least 5:
+      var paginationSize = 13; 
+      var currentPage;
+
+      function showPage(whichPage) {
+        if (whichPage < 1 || whichPage > totalPages) return false;
+        currentPage = whichPage;
+        $("#tbody tr").hide()
+            .slice((currentPage-1) * limitPerPage, 
+                    currentPage * limitPerPage).show();
+        // Replace the navigation items (not prev/next):            
+        $(".pagination li").slice(1, -1).remove();
+        getPageList(totalPages, currentPage, paginationSize).forEach( item => {
+            $("<li>").addClass("page-item")
+                     .addClass(item ? "current-page" : "disabled")
+                     .toggleClass("active", item === currentPage).append(
+                $("<a>").addClass("page-link").attr({
+                    href: "javascript:void(0)"}).text(item || "...")
+            ).insertBefore("#next-page");
+        });
+        // Disable prev/next when at first/last page:
+        $("#previous-page").toggleClass("disabled", currentPage === 1);
+        $("#next-page").toggleClass("disabled", currentPage === totalPages);
+        return true;
+      }
+
+      // Include the prev/next buttons:
+      $(".pagination").append(
+        $("<li>").addClass("page-item").attr({ id: "previous-page" }).append(
+            $("<a>").addClass("page-link").attr({
+                href: "javascript:void(0)"}).text("Prev")
+        ),
+        $("<li>").addClass("page-item").attr({ id: "next-page" }).append(
+            $("<a>").addClass("page-link").attr({
+                href: "javascript:void(0)"}).text("Next")
+        )
+      );
+      // Show the page links
+      $("#tbody").show();
+      showPage(1);
+
+      // Use event delegation, as these items are recreated later    
+      $(document).on("click", ".pagination li.current-page:not(.active)", function () {
+          return showPage(+$(this).text());
+      });
+      $("#next-page").on("click", function () {
+          return showPage(currentPage+1);
+      });
+
+      $("#previous-page").on("click", function () {
+          return showPage(currentPage-1);
+      });
+    });
       // end insert
     });
+    function logoutSuccess(){
+	$.ajax({
+      url: '/user/logoutSuccess/',
+        data: {
+          id: 			$("#id").val(),
+          nama: 	    $("#nama").val(),
+          kd_kec:       $("#kd_kec").val(),
+          kel_des:      $("#kel_des").val(),
+          nm_kec: 	    $("#nm_kec").val(),
+          nm_kel_des:   $("#nm_kel_des").val()
+        },
+        type: "GET",
+        success:function(data){
+          var resp = eval('(' + data + ')');
+          event.preventDefault();
+					document.getElementById('logout-form').submit();
+        }
+      });
+		}
 </script>
 <?php endif; ?>
 </body>

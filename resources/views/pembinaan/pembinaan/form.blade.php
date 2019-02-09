@@ -40,7 +40,7 @@
   {!! Form::label('penyelengara', 'Penyelenggara', ['class' => 'col-md-3 col-form-label']) !!}
   <div class="col-md-4">
     <div class="form-group">
-      {!! Form::text('penyelengara', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+      {!! Form::text('penyelengara', null, ('required' == 'required') ? ['class' => 'form-control'] : ['class' => 'form-control']) !!}
     </div>
   </div>
   {!! $errors->first('penyelengara', '<p class="help-block">:message</p>') !!}
@@ -51,7 +51,7 @@
   {!! Form::label('kegiatan', 'Isi Kegiatan', ['class' => 'col-md-3 col-form-label']) !!}
   <div class="col-md-4">
     <div class="form-group">
-      {!! Form::textarea('kegiatan', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+      {!! Form::textarea('kegiatan', null, ('required' == 'required') ? ['class' => 'form-control'] : ['class' => 'form-control']) !!}
     </div>
   </div>
   {!! $errors->first('kegiatan', '<p class="help-block">:message</p>') !!}
@@ -66,5 +66,4 @@
   </div>
   {!! $errors->first('narasumber', '<p class="help-block">:message</p>') !!}
  </div> -->
-
 

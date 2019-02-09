@@ -30,9 +30,42 @@ class ContentPublikasiController extends Controller
                 ->orWhere('deskripsi', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
+            $result = ContentPublikasi::select('content_publikasis.*', 'jnsPublikasi.nama')
+            ->join('jnsPublikasi', 'jnsPublikasi.id' , '=','content_publikasis.id_publikasi')
+            ->latest()->get();
+
+        if ($result == '[]') {
             $contentpublikasi = ContentPublikasi::select('content_publikasis.*', 'jnsPublikasi.nama')
             ->join('jnsPublikasi', 'jnsPublikasi.id' , '=','content_publikasis.id_publikasi')
-            ->latest()->paginate($perPage);
+            ->latest()->get();
+        }else{
+            foreach ($result as $row){
+                if (!empty($row->kd_kec)) {
+                    $queryKecamatan = Wilayah::where('kd_kec',$row->kd_kec)->where('kd_kel_des','00')->get();
+                    $namaKecamatan = $queryKecamatan[0]->nama;
+                }else{
+                    $namaKecamatan = '';
+                }
+                
+              if($row->kd_kec != '' && $row->kel_des !=''){
+                $query = Wilayah::where('kd_kec',$row->kd_kec)->where('kd_kel_des',$row->kel_des)->get();
+                $namaKelurahan = $query[0]->nama;
+              }else{
+                $namaKelurahan = '';
+              }
+
+                $contentpublikasi[] = [
+                    'id' => $row->id,
+                    'created_at' => $row->created_at,
+                    'id_publikasi' => $row->id_publikasi,
+                    'judul' => $row->judul,
+                    'nama' => $row->nama,
+                    'username' => $row->username,
+                    'kd_kec' =>  $namaKecamatan,
+                    'kel_des' => $namaKelurahan,
+                ];
+            }
+          }
         }
 
         $slcKdKec = DB::table("wilayah")
@@ -80,10 +113,20 @@ class ContentPublikasiController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $err = "";
+        $content = "";
+        $cek = "";
         $requestData = $request->all();
-        ContentPublikasi::create($requestData);
+        // $slcContentPublikasi = DB::selectOne(" SELECT * from content_publikasis where judul = '".$requestData->judul."' and kd_kec = '".$requestData->kd_kec."' and kel_des = '".$requestData->kel_des."' ");
+        // if (!empty($slcContentPublikasi)) {
+        //     $err = "Event already exist";
+        // }else{
 
+        // }
+
+        ContentPublikasi::create($requestData);
+        $arrayRespond = array('err' => $err, );
+        // return json_encode($arrayRespond)->redirect('ContentPublikasi/content-publikasi')->with('flash_message', 'ContentPublikasi added!');
         return redirect('ContentPublikasi/content-publikasi')->with('flash_message', 'ContentPublikasi added!');
     }
 
@@ -181,13 +224,46 @@ class ContentPublikasiController extends Controller
         $table = DB::table("content_publikasis");
         if (!empty($judul))  $table->where("judul", "like", "%$judul%");
         if (!empty($user))  $table->where("username", "like", "%$user%");
-        if (!empty($kd_kec))  $table->where("kd_kec", "like", "%$kd_kec%");
-        if (!empty($kel_des))  $table->where("kel_des", "like", "%$kel_des%");
+        if (!empty($kd_kec))  $table->where("kd_kec", $kd_kec);
+        if (!empty($kel_des))  $table->where("kel_des", $kel_des);
         
         $result = $table
                 ->select('content_publikasis.*', 'jnsPublikasi.nama')
                 ->join('jnsPublikasi', 'jnsPublikasi.id' , '=','content_publikasis.id_publikasi')
-                ->get();
-        return json_encode($result);
+                ->latest()->get();
+
+        if ($result == '[]') {
+            $detailResult = $table->latest()->get();
+        }else{
+
+    foreach ($result as $row){
+        if (!empty($row->kd_kec)) {
+            $queryKecamatan = Wilayah::where('kd_kec',$row->kd_kec)->where('kd_kel_des','00')->get();
+            $namaKecamatan = $queryKecamatan[0]->nama;
+        }else{
+            $namaKecamatan = '';
+        }
+        
+      if($row->kd_kec != '' && $row->kel_des !=''){
+        $query = Wilayah::where('kd_kec',$row->kd_kec)->where('kd_kel_des',$row->kel_des)->get();
+        $namaKelurahan = $query[0]->nama;
+      }else{
+        $namaKelurahan = '';
+      }
+
+        $detailResult[] = [
+            'id' => $row->id,
+            'created_at' => $row->created_at,
+            'id_publikasi' => $row->id_publikasi,
+            'judul' => $row->judul,
+            'nama' => $row->nama,
+            'username' => $row->username,
+            'kd_kec' =>  $namaKecamatan,
+            'kel_des' => $namaKelurahan,
+        ];
+    }
+}
+
+    return json_encode($detailResult);
     }
 }

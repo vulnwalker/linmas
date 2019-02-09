@@ -22,12 +22,18 @@
            </div> -->
 
 
+
+               {!! Form::hidden('status_linmas', null, ('required' == 'required') ? ['id' => 'status_linmas','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+               {!! Form::hidden('jabatan', null, ('required' == 'required') ? ['id' => 'jabatan','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+
+
+
            <div class="form-group{{ $errors->has('nama') ? 'has-error' : ''}}">
              <div class="row">
                {!! Form::label('nama', 'Nama', ['class' => 'col-md-3 col-form-label']) !!}
                <div class="col-md-4">
                  <div class="form-group">
-               {!! Form::text('nama', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+               {!! Form::text('nama', null, ('required' == 'required') ? ['id' => 'nama','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
                {!! $errors->first('nama', '<p class="help-block">:message</p>') !!}
                  </div>
                </div>
@@ -39,13 +45,13 @@
                {!! Form::label('tgl_lahir', 'Tempat/ Tgl Lahir', ['class' => 'col-md-3 col-form-label']) !!}
               <div class="col-md-2">
                  <div class="form-group">
-               {!! Form::text('tempat_lahir', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+               {!! Form::text('tempat_lahir', null, ('required' == 'required') ? ['id' => 'tempat_lahir','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
                {!! $errors->first('tempat_lahir', '<p class="help-block">:message</p>') !!}
                  </div>
                </div>/
                <div class="col-md-2">
                  <div class="form-group">
-               {!! Form::text('tgl_lahir', null, ('required' == 'required') ? ['class' => 'form-control datepicker', 'required' => 'required'] : ['class' => 'form-control']) !!}
+               {!! Form::text('tgl_lahir', null, ('required' == 'required') ? ['id' => 'tgl_lahir','class' => 'form-control datepicker', 'required' => 'required'] : ['class' => 'form-control']) !!}
                {!! $errors->first('tgl_lahir', '<p class="help-block">:message</p>') !!}
                  </div>
                </div>
@@ -57,7 +63,7 @@
                {!! Form::label('jenis_kelamin', 'Jenis Kelamin', ['class' => 'col-md-3 col-form-label']) !!}
                <div class="col-md-2">
                  <div class="form-group">
-                   {!! Form::select('jenis_kelamin', ['' => '', 'Laki-Laki' => 'Laki-Laki', 'Perempuan' => 'Perempuan'], $jenis_kelamin, ['class' => 'form-control']) !!}
+                   {!! Form::select('jenis_kelamin', ['' => '', 'Laki-Laki' => 'Laki-Laki', 'Perempuan' => 'Perempuan'], $jenis_kelamin, ['id' => 'jenis_kelamin','class' => 'form-control']) !!}
                    {!! $errors->first('jenis_kelamin', '<p class="help-block">:message</p>') !!}
              </div>
            </div>
@@ -69,7 +75,7 @@
                {!! Form::label('no_ktp', 'No Ktp',['class' => 'col-md-3 col-form-label']) !!}
                <div class="col-md-3">
                  <div class="form-group">
-               {!! Form::text('no_ktp', null, ('required' == 'required') ? ['onkeyup' => 'ktp()','class' => 'form-control ktp', 'required' => 'required'] : ['onkeyup' => 'ktp()','class' => 'form-control ktp']) !!}
+               {!! Form::text('no_ktp', null, ('required' == 'required') ? ['id' => 'no_ktp','onkeyup' => 'ktp()','class' => 'form-control ktp', 'required' => 'required'] : ['onkeyup' => 'ktp()','class' => 'form-control ktp']) !!}
                  </div>
                </div>
                {!! $errors->first('no_ktp', '<p class="help-block">:message</p>') !!}
@@ -81,7 +87,7 @@
                {!! Form::label('alamat', 'Alamat ', ['class' => 'col-md-3 col-form-label']) !!}
                <div class="col-md-4">
                  <div class="form-group">
-               {!! Form::textarea('alamat', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
+               {!! Form::textarea('alamat', null, ('' == 'required') ? ['id' => 'alamat','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']) !!}
                {!! $errors->first('alamat', '<p class="help-block">:message</p>') !!}
              </div>
            </div>
@@ -118,13 +124,13 @@
              {!! Form::label('rt', 'RT/ RW', ['class' => 'col-md-3 col-form-label']) !!}
              <div class="col-md-1">
                <div class="form-group">
-             {!! Form::text('rt', null, ('required' == 'required') ? ['class' => 'form-control kode','onkeypress' => 'kode()', 'required' => 'required'] : ['class' => 'form-control']) !!}
+             {!! Form::text('rt', null, ('required' == 'required') ? ['id' => 'rt','class' => 'form-control kode','onkeypress' => 'kode()', 'required' => 'required'] : ['class' => 'form-control']) !!}
              {!! $errors->first('rt', '<p class="help-block">:message</p>') !!}
                </div>
              </div>/
              <div class="col-md-1">
                <div class="form-group">
-             {!! Form::text('rw', null, ('required' == 'required') ? ['class' => 'form-control kode','onkeypress' => 'kode()', 'required' => 'required'] : ['class' => 'form-control']) !!}
+             {!! Form::text('rw', null, ('required' == 'required') ? ['id' => 'rw','class' => 'form-control kode','onkeypress' => 'kode()', 'required' => 'required'] : ['class' => 'form-control']) !!}
              {!! $errors->first('rw', '<p class="help-block">:message</p>') !!}
                </div>
              </div>
@@ -136,7 +142,7 @@
                {!! Form::label('hp', 'Hp', ['class' => 'col-md-3 col-form-label']) !!}
                <div class="col-md-2">
                  <div class="form-group">
-               {!! Form::text('hp', null, ('' == 'required') ? ['onkeyup' => 'noHP()', 'class' => 'form-control noHP', 'required' => 'required'] : ['onkeyup' => 'noHP()', 'class' => 'form-control noHP']) !!}
+               {!! Form::text('hp', null, ('' == 'required') ? ['id' => 'hp','onkeyup' => 'noHP()', 'class' => 'form-control noHP', 'required' => 'required'] : ['onkeyup' => 'noHP()', 'class' => 'form-control noHP']) !!}
                {!! $errors->first('hp', '<p class="help-block">:message</p>') !!}
                </div>
              </div>
@@ -148,7 +154,7 @@
              {!! Form::label('status', 'Status', ['class' => 'col-md-3 col-form-label']) !!}
              <div class="col-md-2">
                <div class="form-group">
-                  {!! Form::select('status', ['' => '--Status--','Janda' => 'Janda','Duda' => 'Duda','Kawin' => 'Kawin', 'Belum Kawin' => 'Belum Kawin'],$status, ['class' => 'form-control']) !!}
+                  {!! Form::select('status', ['' => '--Status--','Janda' => 'Janda','Duda' => 'Duda','Kawin' => 'Kawin', 'Belum Kawin' => 'Belum Kawin'],$status, ['id' => 'status','class' => 'form-control']) !!}
                </div>
              </div>             
            </div>
@@ -159,7 +165,7 @@
              {!! Form::label('agama', 'Agama', ['class' => 'col-md-3 col-form-label']) !!}
              <div class="col-md-2">
                <div class="form-group">
-                  {!! Form::select('agama', ['' => '--Agama--','Islam' => 'Islam','Kristen' => 'Kristen','Kartolik' => 'Kartolik', 'Budha' => 'Budha', 'Hindu' => 'Hindu', 'Konghucu' => 'Konghucu'], $agama, ['class' => 'form-control']) !!}
+                  {!! Form::select('agama', ['' => '--Agama--','Islam' => 'Islam','Kristen' => 'Kristen','Kartolik' => 'Kartolik', 'Budha' => 'Budha', 'Hindu' => 'Hindu', 'Konghucu' => 'Konghucu'], $agama, ['id' => 'agama','class' => 'form-control']) !!}
                </div>
              </div>             
            </div>
@@ -328,7 +334,7 @@
       @if($formMode === 'edit')
         {!! Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']) !!}
       @else
-      {!! Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']) !!}
+      {!! Form::submit('Simpan', ['id' => 'simpans','onclick' => 'SimpanBtn()','class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']) !!}
       @endif
 
     </div>
@@ -340,16 +346,21 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
 <script type="text/javascript">
+function SimpanBtn() {
+
+  if ($('#nama').val()== '' || $('#tempat_lahir').val() == '' || $('#tgl_lahir').val() == '' || $('#jenis_kelamin').val() == '' || $('#no_ktp').val() == '' || $('#alamat').val() == '' || $('#id_kecamatan').val() == '' || $('#id_kelurahan').val() =='' || $('#rt').val() == '' || $('#rw').val() =='' ||  $('#status').val() == '' || $('#agama').val() == '') {
+     document.getElementById("simpans").disabled = false;
+     swal("Maaf", "Lengkapi Data", "error");
+  }else{
+    document.getElementById("simpans").disabled = true;
+    document.getElementById("simpans").disabled = true;
+    document.getElementById("simpan").submit();
+
+  }
+     
+}
+
 function ChangeStatus(){
   var status_linmas = $('#status_linmas').val();
   if(status_linmas === "2"){

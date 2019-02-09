@@ -76,7 +76,10 @@
                               <a class="nav-link" href="<?php echo e(url("jabatan/jabatan")); ?>" aria-expanded="false" style="color: blue; font-weight: bold; padding-right: .2rem;">Jabatan |</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="<?php echo e(url("katLaporan/katLaporan")); ?>" aria-expanded="false" style="color: red; font-weight: bold;">Kategori Laporan</a>
+                              <a class="nav-link" href="<?php echo e(url("katLaporan/katLaporan")); ?>" aria-expanded="false" style="color: red; font-weight: bold; padding-right: .2rem;">Kategori Laporan |</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="<?php echo e(url("images/images")); ?>" aria-expanded="false" style="color: red; font-weight: bold;">Images</a>
                             </li>
                           </ul>
                         </div>
@@ -113,7 +116,7 @@
                           <input type="number" name="jmlData" id="jmlData" class="form-control" style="width: 65px;" value="25">
                         </div>
                         <div class="col-md-1">
-                          <button type="button" id="search" name="search" class="btn btn-info" onclick="search()">TAMPILKAN</button>
+                          <button type="button" id="search" name="search" class="btn btn-info" onclick="search()" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 5px;float: right;width: 100%;">TAMPILKAN</button>
                         </div>
                       </div>
                       

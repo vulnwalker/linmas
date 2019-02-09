@@ -25,13 +25,19 @@
             vertical-align: unset;
         }
 
+        .perfect-scrollbar-on .main-panel, .perfect-scrollbar-on .sidebar {
+            height: auto !important;
+            max-height: none;
+        }
+
+
       </style>
       <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/loading.css')); ?>">
 </head>
 <body>
     <div class="wrapper ">
        
-      <div class="main-panel" style="width:  100%;">
+      <div class="main-panel" style="width:  100%;overflow: hidden!important;">
         <?php echo $__env->make('admin.navbar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
         <?php echo $__env->yieldContent('content'); ?>
       </div>

@@ -203,10 +203,8 @@
         <?php echo Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']); ?>
 
       <?php else: ?>
-<!--       <a href="<?php echo e(url('/posJaga/pos-jaga')); ?>" title="Back" class= "btn btn-primary" style= "width: 100%;font-size: 17px;"> -->
-        <?php echo Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']); ?> 
-<!--         Simpan -->
-      </a>
+      <?php echo Form::submit('Simpan', ['id' => 'simpans','onclick' => 'SimpanBtn()','class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']); ?>
+
       <?php endif; ?>
 
     </div>
@@ -221,6 +219,21 @@
 
 
 <script type="text/javascript">
+
+  function SimpanBtn() {
+
+  if ($('#id_kecamatan').val()== '' || $('#id_kelurahan').val() == '' || $('#nama').val() == '' || $('#alamat').val() == '') {
+     document.getElementById("simpans").disabled = false;
+     swal("Maaf", "Lengkapi Data", "error");
+  }else{
+    document.getElementById("simpans").disabled = true;
+    document.getElementById("simpans").disabled = true;
+    document.getElementById("simpan").submit();
+
+  }
+     
+}
+
 function ChangeKecamatan() {
       var id_kecamatan = $('#id_kecamatan').val();
       if(id_kecamatan) {

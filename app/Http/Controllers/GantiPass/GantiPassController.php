@@ -5,9 +5,6 @@ namespace App\Http\Controllers\GantiPass;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Username;
-
-// use App\Kelurahan;
-// use App\Kecamatan;
 use Illuminate\Http\Request;
 use DB;
 
@@ -84,6 +81,7 @@ class GantiPassController extends Controller{
         $username       = $request->passwordBaru;
         $password       = bcrypt($request->passwordBaru);
         $id             = $request->id;
+        $logout         = date("Y-m-d H:i:s");
         $err            = "";
 
         $edit = DB::table("users")
@@ -91,10 +89,122 @@ class GantiPassController extends Controller{
             ->update([
                 'password'      => $password,
                 'password2nd'   => $username,
-            ]);
+        ]);
+
+        $editLogout = DB::table("users_login")
+            ->where('refid_user', $id)
+            ->update([
+                'logout'     => $logout
+        ]);
             
         $arrayRespond = array('err' => $err, );
         return json_encode($arrayRespond);
+    }
+
+    public function loginSuccess(Request $request){
+        $id             = $request->id;
+        $nama           = $request->nama;
+        $kd_kec         = $request->kd_kec;
+        $kel_des        = $request->kel_des;
+        $nm_kec         = $request->nm_kec;
+        $nm_kel_des     = $request->nm_kel_des;
+        $login          = date("Y-m-d H:i:s");
+        $loginDate      = date("Y-m-d");
+        $logout         = date("Y-m-d H:i:s");
+        $err            = "";
+        $content        = "";
+        $cek            = "";
+        $countLogin     = "";
+
+        $slcNumLogin = DB::selectOne(" SELECT * from users_login where refid_user = '".$id."' order by login desc ");
+        if (!empty($slcNumLogin)) {
+            $slcOnlyLoginUser = DB::table("users_login")
+                ->where("refid_user", $id)
+                ->select("id","login")
+                ->orderBy("login", "desc")
+                ->get();
+            $expLogin = explode(" ", $slcOnlyLoginUser[0]->login);
+
+            if ($loginDate == $expLogin[0]) {
+                $edit = DB::table("users_login")
+                    ->where('refid_user', $id)
+                    ->where('login', $slcOnlyLoginUser[0]->login)
+                    ->update([
+                        'kd_kec'        => $kd_kec,
+                        'kel_des'       => $kel_des,
+                        'nm_kel_des'    => $nm_kel_des,
+                        'nm_kec'        => $nm_kec,
+                        // 'login'         => $login,
+                        'status_login'  => 1
+                ]);
+                $content = "update if";
+            }else{
+
+                $edit = DB::statement("UPDATE users_login set status_login = 0 where left(login,10) != '".$loginDate."' ");
+
+                // $del = DB::table("users_login")->where("refid_user", $id)->delete();
+                $ins = DB::table("users_login")->insert([
+                    'refid_user'    => $id,
+                    'nama'          => $nama,
+                    'kd_kec'        => $kd_kec,
+                    'kel_des'       => $kel_des,
+                    'nm_kec'        => $nm_kec,
+                    'nm_kel_des'    => $nm_kel_des,
+                    'login'         => $login,
+                    'logout'        => $logout,
+                    'status_login'  => 1
+                ]);
+                $content = "else awal";
+            }
+        }else{
+            $ins = DB::table("users_login")->insert([
+                'refid_user'    => $id,
+                'nama'          => $nama,
+                'kd_kec'        => $kd_kec,
+                'kel_des'       => $kel_des,
+                'nm_kec'        => $nm_kec,
+                'nm_kel_des'    => $nm_kel_des,
+                'login'         => $login,
+                'logout'        => $logout,
+                'status_login'  => 1
+            ]);
+            $content = "else akhir";
+        }
+        $cek = " UPDATE users_login set status_login = 0 where left(login,10) != '".$loginDate."' ";
+        $countLogin = DB::table('users_login')->where("status_login", 1)->count();
+        $arrayValues = array('content' => $content, 'cek', $cek, 'countLogin' => $countLogin );
+        return json_encode($arrayValues);
+    }
+
+    public function logoutSuccess(Request $request){
+        $id             = $request->id;
+        $nama           = $request->nama;
+        $nm_kec         = $request->nm_kec;
+        $nm_kel_des     = $request->nm_kel_des;
+        $login          = date("Y-m-d H:i:s");
+        $loginDate      = date("Y-m-d");
+        $logout         = date("Y-m-d H:i:s");
+        $err            = "";
+        $content        = "";
+        $cek            = "";
+
+        $slcOnlyLoginUser = DB::table("users_login")
+            ->where("refid_user", $id)
+            ->select("id","login")
+            ->orderBy("login", "desc")
+            ->get();
+        $expLogin = explode(" ", $slcOnlyLoginUser[0]->login);
+
+        $edit = DB::table("users_login")
+            ->where('refid_user', $id)
+            ->where('login', $slcOnlyLoginUser[0]->login)
+            ->update([
+                'logout'        => $logout,
+                'status_login'  => 0
+        ]);
+
+        $arrayValues = array('content' => $content, 'cek', $cek );
+        return json_encode($arrayValues);
     }
 
     public function create(){

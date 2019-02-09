@@ -23,7 +23,7 @@
                     <div class="card-body">
 
 
-                        <?php echo Form::open(['url' => '/posJaga/pos-jaga', 'class' => 'form-horizontal', 'files' => true]); ?>
+                        <?php echo Form::open(['url' => '/posJaga/pos-jaga', 'class' => 'form-horizontal', 'id' => 'simpan', 'files' => true]); ?>
 
 
                         <?php echo $__env->make('posJaga.pos-jaga.form', ['formMode' => 'create'], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

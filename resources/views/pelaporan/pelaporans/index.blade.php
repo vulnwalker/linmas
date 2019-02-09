@@ -145,14 +145,14 @@ button#search {
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-1">
+                      <div class="col-md-2">
                         <label class="control-label">JUMLAH DATA</label>
                       </div>
                       <div class="col-md-1">
                         <input type="number" name="jmlData" id="jmlData" class="form-control" style="width: 65px;" value="25">
                       </div>
                       <div class="col-md-1">
-                        <button type="button" id="search" name="search" class="btn btn-info" onclick="search()">TAMPILKAN</button>
+                        <button type="button" id="search" name="search" class="btn btn-info" onclick="search()" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 5px;float: right;width: 100%;">TAMPILKAN</button>
                       </div>
                     </div>
                     {{-- <div class="row">
@@ -179,6 +179,8 @@ button#search {
                                         <th>Judul</th>
                                         {{-- <th>Deskripsi</th> --}}
                                         <th>User</th>
+                                        <th>Kecamatan</th>
+                                        <th>Kelurahan / Desa</th>
                                         <th style="width: 11%;text-align: center;">Tanggal/ Waktu</th>
                                         <th style="width: 8%;text-align: center;">Actions</th>
                                     </tr>
@@ -209,7 +211,9 @@ button#search {
                                           {{ $isi }}
                                         </td> --}}
                                         <td>{{ $item->username }}</td>
-                                        <td>{{ $item->created_at }}</td>
+                                        <td>{{ $item->kd_kec }}</td>
+                                        <td>{{ $item->kel_des }}</td>
+                                        <td>{{ date("d-m-Y", strtotime($item->created_at)) }}</td>
                                         <td>
                                             <a href="{{ url('/pelaporan/PDF/' . $item->id) }}" target="_blank" title="View ContentPublikasi"><button class="btn btn-info btn-sm">Download</button></a>
                                         </td>
@@ -393,9 +397,11 @@ button#search {
     $.ajax({
     url: '/pelaporan/srcContent/',
       data: {
-        nama:   $("#nama").val(),
-        judul:  $("#judul").val(),
-        user:   $("#user").val()
+        nama:     $("#nama").val(),
+        judul:    $("#judul").val(),
+        kd_kec:   $("#kd_kec").val(),
+        kel_des:  $("#kel_des").val(),
+        user:     $("#user").val()
       },
       type: "GET",
       dataType: "json",
@@ -404,8 +410,19 @@ button#search {
         $('#tbody').empty();
         var noColumn = 1;
         $.each(data, function(index, element){
+          var tanggalSelesai = element.created_at;
+          if (tanggalSelesai == "") {
+            var resultTanggalS = "";
+          }else{
+            var tanggalS = new Date(element.created_at);
+            if (tanggalS.getDate() <= 9) {
+              var resultTanggalS = '0'+tanggalS.getDate() + '-' + (tanggalS.getMonth() + 1) + '-' + tanggalS.getFullYear();
+            }else{
+              var resultTanggalS = tanggalS.getDate() + '-' + (tanggalS.getMonth() + 1) + '-' + tanggalS.getFullYear();
+            }
+          }
 
-          $('#tbody').append("<tr id="+ element.id +"><td style='text-align: center;'>"+ noColumn +"</td><td style='width: 3%;'><div class='form-check mt-3' style='padding: unset!important'><div class='form-check' style='width: 1px; height: 36px; padding: unset!important;'><label class='form-check-label'><input type='checkbox' class='checkbox' value="+ element.id +"><span class='form-check-sign'></span></label></div></div></td><td>"+ element.judul +"</td><td>"+element.username+"</td><td>"+element.created_at+"</td><td><a href='http://linmas.pilar.web.id/pelaporan/PDF/"+element.id+"' target='_blank' title='View ContentPublikasi'><button class='btn btn-info btn-sm'>Download</button></a></td></tr>");
+          $('#tbody').append("<tr id="+ element.id +"><td style='text-align: center;'>"+ noColumn +"</td><td style='width: 3%;'><div class='form-check mt-3' style='padding: unset!important'><div class='form-check' style='width: 1px; height: 36px; padding: unset!important;'><label class='form-check-label'><input type='checkbox' class='checkbox' value="+ element.id +"><span class='form-check-sign'></span></label></div></div></td><td>"+ element.judul +"</td><td>"+element.username+"</td><td>"+element.kd_kec+"</td><td>"+element.kel_des+"</td><td>"+resultTanggalS+"</td><td><a href='http://linmas.pilar.web.id/pelaporan/PDF/"+element.id+"' target='_blank' title='View ContentPublikasi'><button class='btn btn-info btn-sm'>Download</button></a></td></tr>");
 
             // start paginathing
             function getPageList(totalPages, page, maxLength) {

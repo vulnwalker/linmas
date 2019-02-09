@@ -30,7 +30,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="border-bottom: 1px solid #89ceef !important;">
   <a class="navbar-brand" href="{{ url('/admin') }}">
-    <img src="{{ asset('assets/images/logo-serang.png') }}" style="width: 50px; height: 50px;">
+    <img src="{{ asset('assets/images/logo-serang.png') }}" style="height: 50px;border: 1px solid #f8f9fa !important;">
   </a>
   <span style="font-size: 17px;">Linmas Kabupaten Serang</span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

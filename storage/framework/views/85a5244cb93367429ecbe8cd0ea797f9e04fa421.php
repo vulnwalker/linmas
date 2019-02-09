@@ -55,19 +55,6 @@
                           <p class="card-category"></p>
                         </div>
                         <div class="col-md-6" style="text-align:right;">
-                          
-<!--                           <a href="<?php echo e(url('/pengesahan/pengesahan/create')); ?>" class="btn btn-success btn-sm" title="Add New Kecamatan">
-                              
-                              Baru
-                          </a>
-                          <a onclick="editData()" class="btn btn-warning btn-sm" title="Edit New Kecamatan" style="color:white;">
-                              
-                              Edit
-                          </a>
-                          <a onclick="DeleteData()" class="btn btn-danger btn-sm" title="Edit New Kecamatan" style="color:white;">
-                              
-                              Hapus
-                          </a> -->
                           <a onclick="Sahkan()" id="btnsahkan" class="btn btn-success btn-sm" title="" style="color:white;">
                               <i class="fal fa-check"></i> Sahkan
                           </a>
@@ -76,17 +63,16 @@
                               <i class="fal fa-ban"></i> Batal Disahkan
                           </a>
 
+                          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#btnSearch">
+                            <i class="fal fa-search"></i> Cari
+                          </button>
+
                           <a onclick="CetakKartuAnggota()" id="btnCetak" class="btn btn-default btn-sm" title="" style="color:white;">
                               <i class="fal fa-print"></i> Cetak Card
                           </a>
                           <a onclick="CetakSK()" id="CetakSK" class="btn btn-default btn-sm" title="" style="color:white;">
                               <i class="fal fa-print"></i> Cetak SK
-                          </a>
-
-                          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#btnSearch">
-                            <i class="fal fa-search"></i> Cari
-                          </button>
-                       
+                          </a>                       
                         </div>
                     </div>
                      <hr style="margin-top: 0%;margin-bottom: 0%;">
@@ -125,36 +111,19 @@
                           <div class="col-md-5">
                             <span>Data/ halaman </span>
                           </div>
-                          <div class="col-md-4">
-                            <input type="text" id="page" class="form-control" placeholder="25" value="<?php echo e(request('paging')); ?>" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;">
+                          <div class="col-md-2">
+                            <input type="text" id="page" class="form-control" placeholder="25" value="<?php echo e(request('paging')); ?>" style="text-align: center;font-size: 15px;border: 1px solid #b5daff;width: 100%;margin-bottom: 6%;padding-right: 5px !important;">
                           </div>
-                          <div class="col-md-3">
-                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;">Tampilkan</button>
+                          <div class="col-md-5">
+                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin: 0%;margin-left:  1%;padding: 0%;margin-top: 0px;font-size: 11px;padding: 3px;float: right;width: 100%;">Tampilkan</button>
                           </div>
                           <div class="col-md-2">
                           </div>
                       </div>
 
-
-<!--                       <div class="row" style="margin-bottom: 1%;">
-                        <div class="col-md-5">
-                        </div>
-                        <div class="col-md-7">
-                          <div style="margin-top: 2%;margin-left: -2px;margin-bottom: 3% width: 100%;">
-                            <button onclick="searchData()" id="search" class="btn btn-info btn-sm" style="margin:  0%; margin-left:  1%;">Search</button>
-                          </div>
-                        </div>
-                      </div> -->
-
                       </div>
                     </div>
                     </div>
-
-                      
-
-
-
-
                         <div>
                               <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>
@@ -195,14 +164,19 @@
                                               $ExplodeTanggal = explode('/',$item->tgl_lahir);
                                               $TanggalLahir =  $ExplodeTanggal[1].'-'.$ExplodeTanggal[0].'-'.$ExplodeTanggal[2];
                                             ?>
-                                            - <?php echo e($item->tempat_lahir); ?>, <?php echo e($TanggalLahir); ?></td>
+                                            - <?php echo e($item->tempat_lahir); ?>, <?php echo e($TanggalLahir); ?>
+
+                                            <br>
+                                            - <?php echo e($item->pendidikan); ?>
+
+                                        </td>
                                         <td>   <?php echo e($item->alamat); ?>
 
                                           <br> Rt <?php echo e($item->rt); ?> - Rw <?php echo e($item->rw); ?>
 
-                                          <br> <?php echo e($item->alamat_kecamatan); ?>
+                                          <br> Kec. <?php echo e($item->alamat_kecamatan); ?>
 
-                                          <br> <?php echo e($item->alamat_kelurahan); ?>
+                                          <br> Kel/Des. <?php echo e($item->alamat_kelurahan); ?>
 
                                         </td>
                                         <td style="width: 13%;">
@@ -236,8 +210,6 @@
                             </table>
                             <div class="pagination">
                             </div>
-                            <div class="pagination-wrapper"> <?php echo $pengesahan->appends(['paging' => Request::get('paging')])->render(); ?> </div>
-                            
 
                         </div>
 
@@ -543,7 +515,40 @@
     <script type="text/javascript">
     $( document ).ready(function() {
         pagePaginathing();
+        searchData();
     });
+
+  function CetakKartuAnggota() {
+    var id = [];
+    $('.checkbox:checked').each(function(i){
+        id[i] = $(this).val();
+    });
+
+    if(id.length === 0){ 
+        swal("Maaf", "Pilih Data Terlebih Dahulu", "error");
+    }else{
+      var loader = '<div id="loading"><ul class="bokeh"><li></li><li></li><li></li></ul></div>';
+      if ( $('#loading').length ) {
+        $('#loading').remove();
+      }
+      $('#loadingData').append(loader);
+
+          $.ajax({
+            url: '/pengesahan/checkCard',
+            type:"GET",
+            data: 'ids='+id,
+            success:function(data) {
+             if (data == '1') {
+              window.open('/linmas/card/'+id, '_blank');
+              $('#loading').remove();
+             }else{
+              swal("Maaf", "Ada Data Belum Disahkan", "error");
+              $('#loading').remove();
+             }
+            }
+        });
+    }
+  }
 
   function BatalSahkan() {
     var id = [];
@@ -1013,19 +1018,29 @@
                 if (element.no_sk != "") {
                   var no_sk = element.nomor;
                 }else{
-                  var no_sk = "<p style='color:red; text-align: center;'>Belum Disahkan</p>";
+                  var no_sk = "<span style='color:red; text-align: left;'>Belum Disahkan</span>";
                 }
 
-                if (element.jabatan != "") {
+                if (element.jabatan != "" && element.jabatan != null) {
                   var jabatan = element.jabatan;
                 }else{
                   var jabatan = "<p style='text-align: left;'>Tidak Mempunyai Jabatan</p>";
                 }
 
-                var ExplodeTanggal = element.tgl_lahir.split('/');
-                var TanggalLahir = ExplodeTanggal[1]+'-'+ExplodeTanggal[0]+'-'+ExplodeTanggal[2];
+                if (element.no_angota != null) {
+                  var no_angota = element.no_angota;
+                }else{
+                  var no_angota = '';
+                }
 
-                $('#tbody').append("<tr><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td style='text-align: center;'>"+element.no_angota+"</td><td>- "+element.nama+" <br>- "+element.jenis_kelamin+" <br>- "+element.tempat_lahir+", "+TanggalLahir+"</td><td>"+element.alamat+"<br> Rt "+element.rt+" - Rw "+element.rw+"<br> "+element.alamat_kecamatan+"<br> "+element.alamat_kelurahan+"</td><td style='width: 13%;'>"+jabatan+"</td><td style='text-align: left;'>"+no_sk+"</td><td style='text-align: center;width: 6%;vertical-align:  middle;'><img src="+img+" style='width: 65%;'></td>");
+                var ExplodeTanggal = element.tgl_lahir.split('/');
+                var ExplodeTanggalBuat = element.created_at.split(' ');
+                var TanggalCreate = ExplodeTanggalBuat[0];
+                var ExplodeGetTanggalBuat = TanggalCreate.split('-');
+                var TanggalLahir = ExplodeTanggal[1]+'-'+ExplodeTanggal[0]+'-'+ExplodeTanggal[2];
+                var TanggalBuat = ExplodeGetTanggalBuat[2]+'-'+ExplodeGetTanggalBuat[1]+'-'+ExplodeGetTanggalBuat[0];
+
+                $('#tbody').append("<tr><td style='text-align: center;width: 0%;line-height: 40px;'>"+ noColumn +"</td><td style='text-align: center;'><div class='form-check' style='padding-left: 0rem;'><label class='form-check-label' style='padding-left: 30px;'><input type='checkbox' class='checkbox' value='"+element.id+"'><span class='form-check-sign'></span></label></div></td><td style='text-align: center;'>"+no_angota+"</td><td>"+element.nama+" <br>"+element.jenis_kelamin+" <br>"+element.tempat_lahir+", "+TanggalLahir+"<br>"+element.pendidikan+"</td><td>"+element.alamat+"<br> Rt "+element.rt+" - Rw "+element.rw+"<br> Kec. "+element.alamat_kecamatan+"<br> Kel/Des. "+element.alamat_kelurahan+"</td><td style='width: 13%;'>"+jabatan+"</td><td style='text-align: left;'>"+no_sk+"<br><span style='font-size: 11px;color: blue;'>Update Terakhir : <br></span><span style='font-size: 11px;color: blue;'>"+ TanggalBuat +", "+element.name+"</span></td><td style='text-align: center;width: 6%;vertical-align:  middle;'><img src="+img+" style='width: 65%;'></td>");
                   // start paginathing
                   function getPageList(totalPages, page, maxLength) {
                     if (maxLength < 5) throw "maxLength must be at least 5";

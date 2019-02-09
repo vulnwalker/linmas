@@ -25,13 +25,21 @@
            </div> -->
 
 
+
+               <?php echo Form::hidden('status_linmas', null, ('required' == 'required') ? ['id' => 'status_linmas','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
+
+               <?php echo Form::hidden('jabatan', null, ('required' == 'required') ? ['id' => 'jabatan','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
+
+
+
+
            <div class="form-group<?php echo e($errors->has('nama') ? 'has-error' : ''); ?>">
              <div class="row">
                <?php echo Form::label('nama', 'Nama', ['class' => 'col-md-3 col-form-label']); ?>
 
                <div class="col-md-4">
                  <div class="form-group">
-               <?php echo Form::text('nama', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
+               <?php echo Form::text('nama', null, ('required' == 'required') ? ['id' => 'nama','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
 
                <?php echo $errors->first('nama', '<p class="help-block">:message</p>'); ?>
 
@@ -46,7 +54,7 @@
 
               <div class="col-md-2">
                  <div class="form-group">
-               <?php echo Form::text('tempat_lahir', null, ('required' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
+               <?php echo Form::text('tempat_lahir', null, ('required' == 'required') ? ['id' => 'tempat_lahir','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
 
                <?php echo $errors->first('tempat_lahir', '<p class="help-block">:message</p>'); ?>
 
@@ -54,7 +62,7 @@
                </div>/
                <div class="col-md-2">
                  <div class="form-group">
-               <?php echo Form::text('tgl_lahir', null, ('required' == 'required') ? ['class' => 'form-control datepicker', 'required' => 'required'] : ['class' => 'form-control']); ?>
+               <?php echo Form::text('tgl_lahir', null, ('required' == 'required') ? ['id' => 'tgl_lahir','class' => 'form-control datepicker', 'required' => 'required'] : ['class' => 'form-control']); ?>
 
                <?php echo $errors->first('tgl_lahir', '<p class="help-block">:message</p>'); ?>
 
@@ -69,7 +77,7 @@
 
                <div class="col-md-2">
                  <div class="form-group">
-                   <?php echo Form::select('jenis_kelamin', ['' => '', 'Laki-Laki' => 'Laki-Laki', 'Perempuan' => 'Perempuan'], $jenis_kelamin, ['class' => 'form-control']); ?>
+                   <?php echo Form::select('jenis_kelamin', ['' => '', 'Laki-Laki' => 'Laki-Laki', 'Perempuan' => 'Perempuan'], $jenis_kelamin, ['id' => 'jenis_kelamin','class' => 'form-control']); ?>
 
                    <?php echo $errors->first('jenis_kelamin', '<p class="help-block">:message</p>'); ?>
 
@@ -84,7 +92,7 @@
 
                <div class="col-md-3">
                  <div class="form-group">
-               <?php echo Form::text('no_ktp', null, ('required' == 'required') ? ['onkeyup' => 'ktp()','class' => 'form-control ktp', 'required' => 'required'] : ['onkeyup' => 'ktp()','class' => 'form-control ktp']); ?>
+               <?php echo Form::text('no_ktp', null, ('required' == 'required') ? ['id' => 'no_ktp','onkeyup' => 'ktp()','class' => 'form-control ktp', 'required' => 'required'] : ['onkeyup' => 'ktp()','class' => 'form-control ktp']); ?>
 
                  </div>
                </div>
@@ -99,7 +107,7 @@
 
                <div class="col-md-4">
                  <div class="form-group">
-               <?php echo Form::textarea('alamat', null, ('' == 'required') ? ['class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
+               <?php echo Form::textarea('alamat', null, ('' == 'required') ? ['id' => 'alamat','class' => 'form-control', 'required' => 'required'] : ['class' => 'form-control']); ?>
 
                <?php echo $errors->first('alamat', '<p class="help-block">:message</p>'); ?>
 
@@ -145,7 +153,7 @@
 
              <div class="col-md-1">
                <div class="form-group">
-             <?php echo Form::text('rt', null, ('required' == 'required') ? ['class' => 'form-control kode','onkeypress' => 'kode()', 'required' => 'required'] : ['class' => 'form-control']); ?>
+             <?php echo Form::text('rt', null, ('required' == 'required') ? ['id' => 'rt','class' => 'form-control kode','onkeypress' => 'kode()', 'required' => 'required'] : ['class' => 'form-control']); ?>
 
              <?php echo $errors->first('rt', '<p class="help-block">:message</p>'); ?>
 
@@ -153,7 +161,7 @@
              </div>/
              <div class="col-md-1">
                <div class="form-group">
-             <?php echo Form::text('rw', null, ('required' == 'required') ? ['class' => 'form-control kode','onkeypress' => 'kode()', 'required' => 'required'] : ['class' => 'form-control']); ?>
+             <?php echo Form::text('rw', null, ('required' == 'required') ? ['id' => 'rw','class' => 'form-control kode','onkeypress' => 'kode()', 'required' => 'required'] : ['class' => 'form-control']); ?>
 
              <?php echo $errors->first('rw', '<p class="help-block">:message</p>'); ?>
 
@@ -168,7 +176,7 @@
 
                <div class="col-md-2">
                  <div class="form-group">
-               <?php echo Form::text('hp', null, ('' == 'required') ? ['onkeyup' => 'noHP()', 'class' => 'form-control noHP', 'required' => 'required'] : ['onkeyup' => 'noHP()', 'class' => 'form-control noHP']); ?>
+               <?php echo Form::text('hp', null, ('' == 'required') ? ['id' => 'hp','onkeyup' => 'noHP()', 'class' => 'form-control noHP', 'required' => 'required'] : ['onkeyup' => 'noHP()', 'class' => 'form-control noHP']); ?>
 
                <?php echo $errors->first('hp', '<p class="help-block">:message</p>'); ?>
 
@@ -183,7 +191,7 @@
 
              <div class="col-md-2">
                <div class="form-group">
-                  <?php echo Form::select('status', ['' => '--Status--','Janda' => 'Janda','Duda' => 'Duda','Kawin' => 'Kawin', 'Belum Kawin' => 'Belum Kawin'],$status, ['class' => 'form-control']); ?>
+                  <?php echo Form::select('status', ['' => '--Status--','Janda' => 'Janda','Duda' => 'Duda','Kawin' => 'Kawin', 'Belum Kawin' => 'Belum Kawin'],$status, ['id' => 'status','class' => 'form-control']); ?>
 
                </div>
              </div>             
@@ -196,7 +204,7 @@
 
              <div class="col-md-2">
                <div class="form-group">
-                  <?php echo Form::select('agama', ['' => '--Agama--','Islam' => 'Islam','Kristen' => 'Kristen','Kartolik' => 'Kartolik', 'Budha' => 'Budha', 'Hindu' => 'Hindu', 'Konghucu' => 'Konghucu'], $agama, ['class' => 'form-control']); ?>
+                  <?php echo Form::select('agama', ['' => '--Agama--','Islam' => 'Islam','Kristen' => 'Kristen','Kartolik' => 'Kartolik', 'Budha' => 'Budha', 'Hindu' => 'Hindu', 'Konghucu' => 'Konghucu'], $agama, ['id' => 'agama','class' => 'form-control']); ?>
 
                </div>
              </div>             
@@ -387,7 +395,7 @@
         <?php echo Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']); ?>
 
       <?php else: ?>
-      <?php echo Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']); ?>
+      <?php echo Form::submit('Simpan', ['id' => 'simpans','onclick' => 'SimpanBtn()','class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']); ?>
 
       <?php endif; ?>
 
@@ -400,16 +408,21 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
 <script type="text/javascript">
+function SimpanBtn() {
+
+  if ($('#nama').val()== '' || $('#tempat_lahir').val() == '' || $('#tgl_lahir').val() == '' || $('#jenis_kelamin').val() == '' || $('#no_ktp').val() == '' || $('#alamat').val() == '' || $('#id_kecamatan').val() == '' || $('#id_kelurahan').val() =='' || $('#rt').val() == '' || $('#rw').val() =='' ||  $('#status').val() == '' || $('#agama').val() == '') {
+     document.getElementById("simpans").disabled = false;
+     swal("Maaf", "Lengkapi Data", "error");
+  }else{
+    document.getElementById("simpans").disabled = true;
+    document.getElementById("simpans").disabled = true;
+    document.getElementById("simpan").submit();
+
+  }
+     
+}
+
 function ChangeStatus(){
   var status_linmas = $('#status_linmas').val();
   if(status_linmas === "2"){

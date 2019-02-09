@@ -23,7 +23,7 @@
                             </ul>
                         @endif
 
-                        {!! Form::open(['url' => '/ContentPublikasi/content-publikasi', 'class' => 'form-horizontal', 'files' => true]) !!}
+                        {!! Form::open(['url' => '/ContentPublikasi/content-publikasi', 'class' => 'form-horizontal', 'id' => 'simpanForm', 'files' => true]) !!}
 
                         @include ('ContentPublikasi.content-publikasi.form', ['formMode' => 'create'])
 

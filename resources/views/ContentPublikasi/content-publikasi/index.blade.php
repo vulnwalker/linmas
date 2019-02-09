@@ -175,41 +175,39 @@ button#search {
                                         <th>Judul</th>
                                         {{-- <th>Deskripsi</th> --}}
                                         <th>User</th>
+                                        <th>Kecamatan</th>
+                                        <th>Kelurahan</th>
                                         <th style="width: 11%;text-align: center;">Tanggal/ Waktu</th>
                                         <th style="width: 8%;text-align: center;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody">
-                                @foreach($contentpublikasi as $item)
-                                  <?php
-                                     $isi = strip_tags($item['deskripsi']);
-                                      if (strlen($isi) > 250) {
-                                          $stringCut = substr($isi, 0, 250);
-                                          $isi = substr($stringCut, 0, strrpos($stringCut, ' ')).'...'; 
-                                      }
-                                  ?>
+                                @foreach($contentpublikasi as $item )
                                     <tr>
                                     <tr >
-                                        <td style="text-align: center;width: 0%;line-height: 40px;">{{ $loop->iteration or $item->id }}</td>
+                                        <td style="text-align: center;width: 0%;line-height: 40px;">{{ $loop->iteration or $item['id'] }}</td>
                                         <td style="text-align: center;">
                                           <div class="form-check" style="padding-left: 0rem;">
                                             <label class="form-check-label" style="padding-left: 30px;">
-                                              <input type="checkbox" class="checkbox" value="{{$item->id}}">
+                                              <input type="checkbox" class="checkbox" value="{{ $item['id']}}">
                                               <span class="form-check-sign"></span>
                                             </label>
                                           </div>
                                       </td>
                                         <td>
-                                          {{ $item->nama }}</td>
-                                          <td>{{ $item->judul }}
+                                          {{ $item['nama'] }}</td>
+                                          <td>{{ $item['judul'] }}
                                         </td>
-                                        {{-- <td>
-                                          {{ $isi }}
-                                        </td> --}}
-                                        <td>{{ $item->username }}</td>
-                                        <td>{{ $item->created_at }}</td>
+                                        <td>{{ $item['username'] }}</td>
                                         <td>
-                                            <a href="{{ url('/content-publikasi/PDF/' . $item->id) }}" target="_blank" title="View ContentPublikasi"><button class="btn btn-info btn-sm">Download</button></a>
+                                          {{ $item['kd_kec'] }}
+                                        </td>
+                                        <td>
+                                          {{ $item['kel_des'] }}
+                                        </td>
+                                        <td>{{ date("d-m-Y H:i:s", strtotime($item['created_at'])) }}</td>
+                                        <td>
+                                            <a href="{{ url('/content-publikasi/PDF/' . $item['id']) }}" target="_blank" title="View ContentPublikasi"><button class="btn btn-info btn-sm">Download</button></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -397,8 +395,38 @@ button#search {
         $('#tbody').empty();
         var noColumn = 1;
         $.each(data, function(index, element){
+          var login = new Date(element.created_at);
+          var loginGetS = login.getSeconds();
+          var loginGetM = login.getMinutes();
+          var loginGetH = login.getHours();
+          var fixGetS   = "";
+          var fixGetM   = "";
+          var fixGetH   = "";
 
-          $('#tbody').append("<tr id="+ element.id +"><td style='text-align: center;'>"+ noColumn +"</td><td style='width: 3%;'><div class='form-check mt-3' style='padding: unset!important'><div class='form-check' style='width: 1px; height: 36px; padding: unset!important;'><label class='form-check-label'><input type='checkbox' class='checkbox' value="+ element.id +"><span class='form-check-sign'></span></label></div></div></td><td>"+element.nama+"</td><td>"+ element.judul +"</td><td>"+element.username+"</td><td>"+element.created_at+"</td><td><a href='http://linmas.pilar.web.id/content-publikasi/PDF/"+element.id+"' target='_blank' title='View ContentPublikasi'><button class='btn btn-info btn-sm'>Download</button></a></td></tr>");
+          if (loginGetS <= 9) {
+            fixGetS = "0"+login.getSeconds();
+          }else{
+            fixGetS = login.getSeconds();
+          }
+
+          if (loginGetM <= 9) {
+            fixGetM = "0"+login.getMinutes();
+          }else{
+            fixGetM = login.getMinutes();
+          }
+
+          if (loginGetH <= 9) {
+            fixGetH = "0"+login.getHours();
+          }else{
+            fixGetH = login.getHours();
+          }
+          if (login.getDate() <= 9) {
+            var formattedlogin = '0'+login.getDate() + '-' + (login.getMonth() + 1) + '-' + login.getFullYear() + ' ' + fixGetH + ':' + fixGetM + ':' + fixGetS;
+          }else{
+            var formattedlogin = login.getDate() + '-' + (login.getMonth() + 1) + '-' + login.getFullYear() + ' ' + fixGetH + ':' + fixGetM + ':' + fixGetS;
+          }
+
+          $('#tbody').append("<tr id="+ element.id +"><td style='text-align: center;'>"+ noColumn +"</td><td style='width: 3%;'><div class='form-check mt-3' style='padding: unset!important'><div class='form-check' style='width: 1px; height: 36px; padding: unset!important;'><label class='form-check-label'><input type='checkbox' class='checkbox' value="+ element.id +"><span class='form-check-sign'></span></label></div></div></td><td>"+element.nama+"</td><td>"+ element.judul +"</td><td>"+element.username+"</td><td>"+element.kd_kec+"</td><td>"+element.kel_des+"</td><td>"+formattedlogin+"</td><td><a href='http://linmas.pilar.web.id/content-publikasi/PDF/"+element.id+"' target='_blank' title='View ContentPublikasi'><button class='btn btn-info btn-sm'>Download</button></a></td></tr>");
 
             // start paginathing
             function getPageList(totalPages, page, maxLength) {

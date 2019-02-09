@@ -26,20 +26,23 @@
     22 => 'Appzcoder\\CrudGenerator\\CrudGeneratorServiceProvider',
     23 => 'Appzcoder\\LaravelAdmin\\LaravelAdminServiceProvider',
     24 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
-    25 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    26 => 'Collective\\Html\\HtmlServiceProvider',
-    27 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    28 => 'Watson\\Active\\ActiveServiceProvider',
-    29 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
-    30 => 'Zizaco\\Entrust\\EntrustServiceProvider',
-    31 => 'Barryvdh\\DomPDF\\ServiceProvider',
-    32 => 'Zizaco\\Entrust\\EntrustServiceProvider',
-    33 => 'App\\Providers\\AppServiceProvider',
-    34 => 'App\\Providers\\AuthServiceProvider',
-    35 => 'App\\Providers\\EventServiceProvider',
-    36 => 'App\\Providers\\RouteServiceProvider',
-    37 => 'Watson\\Active\\ActiveServiceProvider',
-    38 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    25 => 'Collective\\Html\\HtmlServiceProvider',
+    26 => 'Watson\\Active\\ActiveServiceProvider',
+    27 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    28 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    29 => 'Intervention\\Image\\ImageServiceProvider',
+    30 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    31 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    32 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    33 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
+    34 => 'Intervention\\Image\\ImageServiceProvider',
+    35 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    36 => 'App\\Providers\\AppServiceProvider',
+    37 => 'App\\Providers\\AuthServiceProvider',
+    38 => 'App\\Providers\\EventServiceProvider',
+    39 => 'App\\Providers\\RouteServiceProvider',
+    40 => 'Watson\\Active\\ActiveServiceProvider',
+    41 => 'Barryvdh\\DomPDF\\ServiceProvider',
   ),
   'eager' => 
   array (
@@ -57,16 +60,19 @@
     11 => 'Appzcoder\\LaravelAdmin\\LaravelAdminServiceProvider',
     12 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
     13 => 'Watson\\Active\\ActiveServiceProvider',
-    14 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
-    15 => 'Zizaco\\Entrust\\EntrustServiceProvider',
-    16 => 'Barryvdh\\DomPDF\\ServiceProvider',
-    17 => 'Zizaco\\Entrust\\EntrustServiceProvider',
-    18 => 'App\\Providers\\AppServiceProvider',
-    19 => 'App\\Providers\\AuthServiceProvider',
-    20 => 'App\\Providers\\EventServiceProvider',
-    21 => 'App\\Providers\\RouteServiceProvider',
-    22 => 'Watson\\Active\\ActiveServiceProvider',
-    23 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    14 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    15 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    16 => 'Intervention\\Image\\ImageServiceProvider',
+    17 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    18 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
+    19 => 'Intervention\\Image\\ImageServiceProvider',
+    20 => 'Zizaco\\Entrust\\EntrustServiceProvider',
+    21 => 'App\\Providers\\AppServiceProvider',
+    22 => 'App\\Providers\\AuthServiceProvider',
+    23 => 'App\\Providers\\EventServiceProvider',
+    24 => 'App\\Providers\\RouteServiceProvider',
+    25 => 'Watson\\Active\\ActiveServiceProvider',
+    26 => 'Barryvdh\\DomPDF\\ServiceProvider',
   ),
   'deferred' => 
   array (
@@ -169,11 +175,11 @@
     'translation.loader' => 'Illuminate\\Translation\\TranslationServiceProvider',
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
-    'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
     'html' => 'Collective\\Html\\HtmlServiceProvider',
     'form' => 'Collective\\Html\\HtmlServiceProvider',
     'Collective\\Html\\HtmlBuilder' => 'Collective\\Html\\HtmlServiceProvider',
     'Collective\\Html\\FormBuilder' => 'Collective\\Html\\HtmlServiceProvider',
+    'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
     'NunoMaduro\\Collision\\Contracts\\Provider' => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
   ),
   'when' => 
@@ -214,10 +220,10 @@
     'Illuminate\\Validation\\ValidationServiceProvider' => 
     array (
     ),
-    'Laravel\\Tinker\\TinkerServiceProvider' => 
+    'Collective\\Html\\HtmlServiceProvider' => 
     array (
     ),
-    'Collective\\Html\\HtmlServiceProvider' => 
+    'Laravel\\Tinker\\TinkerServiceProvider' => 
     array (
     ),
     'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider' => 

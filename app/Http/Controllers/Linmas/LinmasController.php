@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Linmas;
+use App\Exports\Linmas\LinmasExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -10,8 +12,11 @@ use App\Linma;
 use App\Kecamatan;
 use App\Kelurahan;
 use App\Wilayah;
-use Illuminate\Http\Request;
 
+use App\TempPembinaan;
+use App\DetailPembinaan;
+use Illuminate\Http\Request;
+use PDF;
 class LinmasController extends Controller
 {
     /**
@@ -19,6 +24,22 @@ class LinmasController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    
+    public function Export(Request $request)
+    {
+      $id_kecamatan         = $request->id_kecamatan_print;
+      $id_kelurahan         = $request->id_kelurahan_print;
+      $status_kawin  = $request->status_kawin;
+      $nama                 = $request->nama;
+      $agama                = $request->agama;
+      $jenis_kelamin        = $request->jenis_kelamin;
+      $status_linmas        = $request->status_linmas;
+      $pendidikan           = $request->pendidikan;
+      $date                 = date('d-M-Y H-i-s');
+      return Excel::download(new LinmasExport($status_linmas,$id_kecamatan,$id_kelurahan,$nama,$agama,$jenis_kelamin,$status_kawin,$pendidikan), 'linmas'.$date.'.xlsx');
+
+    }
+    
     public function index(Request $request)
     {
         $keyword = $request->get('search');
@@ -274,7 +295,8 @@ class LinmasController extends Controller
         // $linma->update($requestData);
         $file = $request->foto;
           $namaKecamatan = Wilayah::where('kd_kec',$request->input('id_kecamatan'))->first();
-          
+          $users = Auth::user();
+
           if ($request->input('id_kelurahan') == '0') {
             $KelurahanNama = '';
           }else{
@@ -294,7 +316,8 @@ class LinmasController extends Controller
             'alamat_kelurahan' => $KelurahanNama,
             'rt' => $request->input('rt'),
             'rw' => $request->input('rw'),
-
+            'tgl_lahir' => $request->input('tgl_lahir'),
+            'tempat_lahir' => $request->input('tempat_lahir'),
             'jenis_kelamin' => $request->input('jenis_kelamin'),
 
 
@@ -306,9 +329,10 @@ class LinmasController extends Controller
             'agama' => $request->input('agama'),
             'gol_darah' => $request->input('gol_darah'),
             'pendidikan' => $request->input('pendidikan'),
-            'status_linmas' => '0',
+            'status_linmas' => $request->input('status_linmas'),
             'keterangan' => $request->input('keterangan'),
-            'jabatan' => '',
+            'jabatan' => $request->input('jabatan'),
+            'user_id' => $users->id,
           );
 
         }else{
@@ -321,6 +345,8 @@ class LinmasController extends Controller
             'alamat_kelurahan' => $KelurahanNama,
             'rt' => $request->input('rt'),
             'rw' => $request->input('rw'),
+            'tgl_lahir' => $request->input('tgl_lahir'),
+             'tempat_lahir' => $request->input('tempat_lahir'),
 
             'jenis_kelamin' => $request->input('jenis_kelamin'),
 
@@ -333,8 +359,9 @@ class LinmasController extends Controller
             'agama' => $request->input('agama'),
             'gol_darah' => $request->input('gol_darah'),
             'pendidikan' => $request->input('pendidikan'),
-            'status_linmas' => '0',
-            'jabatan' => '',
+            'status_linmas' => $request->input('status_linmas'),
+            'jabatan' => $request->input('jabatan'),
+            'user_id' => $users->id,
           );
         }
 
@@ -398,6 +425,8 @@ class LinmasController extends Controller
 
         if(!empty($request->hapus)){
           Linma::whereIn('id',explode(",",$ids))->forceDelete();
+          TempPembinaan::whereIn('id_linmas',explode(",",$ids))->forceDelete();
+          DetailPembinaan::whereIn('id_linmas',explode(",",$ids))->forceDelete();
 
         }
         // Linma::whereIn('id',explode(",",$ids))->forceDelete();
@@ -426,7 +455,7 @@ class LinmasController extends Controller
       $alamat = $request->alamat;
 
 
-      $query= Linma::select('linmas.*');
+      $query= Linma::select('linmas.*','users.name')->join('users', 'users.id' , '=','linmas.user_id');
       
       if (!empty($id_kecamatan)) $query->where('linmas.id_kecamatan', "$id_kecamatan");
       if (!empty($id_kelurahan)) $query->where('linmas.id_kelurahan', "$id_kelurahan");
@@ -440,8 +469,65 @@ class LinmasController extends Controller
       if (!empty($status)) $query->where('linmas.status', "$status");
       if (!empty($pendidikan)) $query->where('linmas.pendidikan', "$pendidikan");
       if (!empty($alamat)) $query->where('linmas.alamat','LIKE', "%$alamat%");
-      $linmas = $query->where('status_linmas', $status_linmas)->get();
+      $linmas = $query->where('status_linmas', $status_linmas)->latest()->get();
 
       return json_encode($linmas);
+    }
+
+
+    public function printData(Request $request)
+    {
+
+      $id_kecamatan         = $request->id_kecamatan_print;
+      $id_kelurahan         = $request->id_kelurahan_print;
+      $status_linmas        = $request->status_linmas;
+      $status_linmas_print  = $request->status_linmas_print;
+      $nama                 = $request->nama;
+      $agama                = $request->agama;
+      $jenis_kelamin        = $request->jenis_kelamin;
+      $pendidikan           = $request->pendidikan;
+
+
+      $query= Linma::select('linmas.*');
+      
+      if ($id_kecamatan != '0')   $query->where('linmas.id_kecamatan', "$id_kecamatan");
+      if ($id_kelurahan != '0')   $query->where('linmas.id_kelurahan', "$id_kelurahan");
+      if (!empty($nama))          $query->where('linmas.nama', "$nama");
+      if (!empty($agama))         $query->where('linmas.agama', "$agama");
+      if (!empty($jenis_kelamin)) $query->where('linmas.jenis_kelamin', "$jenis_kelamin");
+      if (!empty($pendidikan))    $query->where('linmas.pendidikan', "$pendidikan");
+      if (!empty($status_linmas_print)) $query->where('linmas.status', "$status_linmas_print");
+      if ($status_linmas == "0" || $status_linmas == "1") $query->where('linmas.status_linmas', "$status_linmas");
+      $linmas = $query->get();
+
+      if ($status_linmas == '1') {
+        $statusLinmas = "Telah Disahkan";
+      }else if ($status_linmas == '0') {
+        $statusLinmas = "Belum Disahkan";
+      }else{
+        $statusLinmas = "Semua";
+      }
+
+
+      if ($id_kecamatan != '0' && $id_kelurahan == '0') {
+        $namaKecamatan = Wilayah::where('kd_kec',$id_kecamatan)->first();
+        $Kecamatan = $namaKecamatan->nama;
+        $Kelurahan = "Semua Kelurahan";
+      }elseif ($id_kecamatan != '0' && $id_kelurahan != '0') {
+        $namaKecamatan = Wilayah::where('kd_kec',$id_kecamatan)->first();
+        $namaKelurahan = Wilayah::where('kd_kec',$id_kecamatan)->where('kd_kel_des',$id_kelurahan)->first();
+        $Kecamatan = $namaKecamatan->nama;
+        $Kelurahan = $namaKelurahan->nama;
+      }else{
+        $Kecamatan = "Semua Kecamatan";
+        $Kelurahan = "Semua Kelurahan";
+      }
+
+
+      $pdf = PDF::loadView('linmas.linmas.print', compact('linmas','statusLinmas','Kecamatan','Kelurahan'));
+      $customPaper = array(0,0,360,360);
+      return $pdf->setPaper('f4', 'portrait')->stream();
+
+      // return view('linmas.linmas.print', compact('linmas'));
     }
 }

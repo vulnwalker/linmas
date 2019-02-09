@@ -386,7 +386,8 @@ class PengesahanController extends Controller
       $pendidikan = $request->pendidikan;
       $alamat = $request->alamat;
 
-      $query= Linma::select('linmas.*','surat_keputusan.nomor')
+      $query= Linma::select('linmas.*','surat_keputusan.nomor','users.name')
+            ->join('users', 'users.id' , '=','linmas.user_id')
             ->leftJoin('surat_keputusan', 'surat_keputusan.id' , '=','linmas.no_sk');
       
       if (!empty($id_kecamatan)) $query->where('linmas.id_kecamatan', "$id_kecamatan");
@@ -512,5 +513,32 @@ class PengesahanController extends Controller
         Linma::whereIn('id',explode(",",$ids))->update($pengesahanUpdate);
 
 
+    }
+
+
+    public function checkCard(Request $request)
+    {
+            
+
+      // $linmas = Linma::findOrFail($request->ids);
+      $linmas = Linma::whereIn('id',explode(",",$request->ids))->selectRaw("MIN(status_linmas) AS status_linmas")->get();
+      if ($linmas[0]->status_linmas === '1') {
+        $data = "1";
+      }else{
+        $data = "0";
+      }
+
+      return $data;
+    }
+
+    public function cardPrint($id, Request $request)
+    {
+      
+      $pengesahan = Linma::select('linmas.*','surat_keputusan.nomor','surat_keputusan.tanggal')
+            ->leftJoin('surat_keputusan', 'surat_keputusan.id' , '=','linmas.no_sk')
+            ->whereIn('linmas.id', explode(",",$id))
+            ->get();
+
+      return view('printCard', compact('pengesahan'));
     }
 }

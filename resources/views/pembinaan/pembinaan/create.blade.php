@@ -55,7 +55,7 @@
                             </ul>
                         @endif
 
-                        {!! Form::open(['url' => '/pembinaan/pembinaan', 'class' => 'form-horizontal', 'files' => true]) !!}
+                        {!! Form::open(['url' => '/pembinaan/pembinaan', 'class' => 'form-horizontal','id' => 'simpan', 'files' => true]) !!}
 
                         @include ('pembinaan.pembinaan.form', ['formMode' => 'create'])
                       <hr style="margin-bottom: 1px;">
@@ -132,7 +132,7 @@
                           <div class="row">
                             <div class="col-md-2" style="margin-left: 13%;">
                         <!--       <a href="{{ url('/posJaga/pos-jaga') }}" title="Back" class= "btn btn-primary" style= "width: 100%;font-size: 17px;"> -->
-                                {!! Form::submit('Simpan', ['class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']) !!} 
+                                {!! Form::submit('Simpan', ['id' => 'simpans','onclick' => 'SimpanBtn()','class' => 'btn btn-primary','style' => 'width: 100%;font-size: 17px;']) !!} 
                         <!--         Simpan -->
                               </a>
 
@@ -146,6 +146,23 @@
                         </div>
 
                         {!! Form::close() !!}
+
+                      <script type="text/javascript">
+                          function SimpanBtn() {
+
+                        if ($('#nama').val()== '' || $('#lokasi').val() == '' || $('#tanggal_mulai').val() == '' || $('#tanggal_selesai').val() == '') {
+                           document.getElementById("simpans").disabled = false;
+                           swal("Maaf", "Lengkapi Data", "error");
+                        }else{
+                          document.getElementById("simpans").disabled = true;
+                          document.getElementById("simpans").disabled = true;
+                          document.getElementById("simpan").submit();
+
+                        }
+                           
+                      }
+                      </script>
+
 
                     </div>
                 </div>

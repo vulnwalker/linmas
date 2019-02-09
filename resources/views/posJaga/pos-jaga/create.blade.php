@@ -23,7 +23,7 @@
                     <div class="card-body">
 
 
-                        {!! Form::open(['url' => '/posJaga/pos-jaga', 'class' => 'form-horizontal', 'files' => true]) !!}
+                        {!! Form::open(['url' => '/posJaga/pos-jaga', 'class' => 'form-horizontal', 'id' => 'simpan', 'files' => true]) !!}
 
                         @include ('posJaga.pos-jaga.form', ['formMode' => 'create'])
 
