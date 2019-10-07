@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Data Sapras
 <?php $__env->stopSection(); ?>

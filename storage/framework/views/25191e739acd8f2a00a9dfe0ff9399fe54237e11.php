@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Edit Pos Jaga #<?php echo e($posjaga->nama); ?>
 

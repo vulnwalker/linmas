@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Buat Bartu Pelaporan
 <?php $__env->stopSection(); ?>

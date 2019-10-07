@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Buat Bartu Publikasi
 <?php $__env->stopSection(); ?>

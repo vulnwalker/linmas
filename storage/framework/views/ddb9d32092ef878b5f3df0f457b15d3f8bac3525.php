@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Data Anggota Linmas
 <?php $__env->stopSection(); ?>

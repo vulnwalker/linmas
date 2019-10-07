@@ -54,6 +54,8 @@ class ContentPublikasiController extends Controller
                 $namaKelurahan = '';
               }
 
+	//	$namaKecamatan = "";
+	//	$namaKelurahan = "";
                 $contentpublikasi[] = [
                     'id' => $row->id,
                     'created_at' => $row->created_at,

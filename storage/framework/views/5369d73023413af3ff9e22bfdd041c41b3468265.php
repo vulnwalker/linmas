@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Data Username
 <?php $__env->stopSection(); ?>

@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Edit User 
 <?php $__env->stopSection(); ?>

@@ -104,7 +104,7 @@ class PelaporansController extends Controller{
         $slcLaporan = DB::table("kategori_laporan")
                  ->pluck("nama","id");
         $slcLaporan->prepend('-- SELECT --','');
-        $contentpublikasi = ContentPublikasi::findOrFail($id);
+        $contentpublikasi = Pelaporan::findOrFail($id);
 
         $Kecamatan = Wilayah::all()->sortBy('nama', SORT_NATURAL | SORT_FLAG_CASE)->where('kd_kel_des','00')->pluck('nama', 'kd_kec');
         $Kecamatan->prepend('','0');

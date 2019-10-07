@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Kategori Publikasi
 <?php $__env->stopSection(); ?>

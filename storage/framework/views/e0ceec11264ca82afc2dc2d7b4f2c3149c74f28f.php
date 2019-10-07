@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Buat Baru Anggota Limas
 <?php $__env->stopSection(); ?>

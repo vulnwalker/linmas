@@ -13,7 +13,7 @@ return array(
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Exports\\Linmas\\LinmasData' => $baseDir . '/app/Exports/Linmas/LinmasData.php',
     'App\\Exports\\Linmas\\LinmasExport' => $baseDir . '/app/Exports/Linmas/LinmasExport.php',
-    'App\\Exports\\Pembinaan\\PembinaanData' => $baseDir . '/app/Exports/Pembinaan/Pembinaan/PembinaanData.php',
+    'App\\Exports\\Pembinaan\\PembinaanData' => $baseDir . '/app/Exports/Pembinaan/PembinaanData.php',
     'App\\Exports\\Pembinaan\\PembinaanExport' => $baseDir . '/app/Exports/Pembinaan/PembinaanExport.php',
     'App\\Exports\\PosJaga\\PosJagaData' => $baseDir . '/app/Exports/PosJaga/PosJagaData.php',
     'App\\Exports\\PosJaga\\PosJagaExport' => $baseDir . '/app/Exports/PosJaga/PosJagaExport.php',

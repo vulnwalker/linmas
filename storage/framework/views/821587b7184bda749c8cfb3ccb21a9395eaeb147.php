@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Data Wilayah
 <?php $__env->stopSection(); ?>

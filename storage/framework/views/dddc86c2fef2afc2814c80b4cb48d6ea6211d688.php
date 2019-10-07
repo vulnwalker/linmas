@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Pelaporan
 <?php $__env->stopSection(); ?>

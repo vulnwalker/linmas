@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Buat Baru User
 <?php $__env->stopSection(); ?>

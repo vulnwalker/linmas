@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Edit  Linmas <?php echo e($linma->nama); ?>
 

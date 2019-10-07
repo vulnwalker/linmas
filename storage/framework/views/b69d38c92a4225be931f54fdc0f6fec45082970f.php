@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Data Pembinaan
 <?php $__env->stopSection(); ?>

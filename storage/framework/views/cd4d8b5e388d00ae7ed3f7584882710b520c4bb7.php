@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Data Pos Jaga
 <?php $__env->stopSection(); ?>

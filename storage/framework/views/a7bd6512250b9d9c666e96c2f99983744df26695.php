@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Users Login
 <?php $__env->stopSection(); ?>

@@ -72,7 +72,7 @@
                           </a>
                           <a onclick="CetakSK()" id="CetakSK" class="btn btn-default btn-sm" title="" style="color:white;">
                               <i class="fal fa-print"></i> Cetak SK
-                          </a>                       
+                          </a>
                         </div>
                     </div>
                      <hr style="margin-top: 0%;margin-bottom: 0%;">
@@ -172,7 +172,7 @@
                                           <br> Kel/Des. {{ $item->alamat_kelurahan}}
                                         </td>
                                         <td style="width: 13%;">
-                                         
+
                                          @if($item->jabatan)
                                             {{ $item->jabatan}}
                                          @else
@@ -183,7 +183,7 @@
                                           @if($item->no_sk !="")
                                             {{$item->nomor}}
                                           @else
-                                          <p style="color:red; text-align: center;">Belum Disahkan</p>  
+                                          <p style="color:red; text-align: center;">Belum Disahkan</p>
                                           @endif
 
                                         </td>
@@ -208,7 +208,7 @@
             </div>
         </div>
     </div>
-    
+
                       <div class="modal fade bd-example-modal-lg" id="modalPendaftaran" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" style="text-align: -webkit-center;padding-left: 0px !important;">
                         <div class="modal-dialog modal-lg" role="document">
                           <div class="modal-content">
@@ -268,7 +268,7 @@
                              </div>
 
 
-                               
+
 
                             </div>
                             <div class="modal-footer">
@@ -348,7 +348,7 @@
                                         <td style="text-align: center;">{{ $item->nomor }}</td>
                                         <td style="text-align: center;">{{ $item->tanggal }}</td>
                                         <td style="text-align: center;width: 15%;">
-                                          <button type="submit" class="btn btn-success btn-sm" onclick="TambahkanSk('{{ $item->nomor }}','{{ $item->id }}')" style="font-size: 11px;">Tambahkan</button>
+                                          <button type="submit" class="btn btn-success btn-sm" onclick=TambahkanSk( {{ $item->id }} ) style="font-size: 11px;">Tambahkan 3</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -443,7 +443,7 @@
                                   <div class="col-md-6">
                                     {!! Form::select('agama', ['' => '-- Agama --','Islam' => 'Islam','Kristen' => 'Kristen','Kartolik' => 'Kartolik', 'Budha' => 'Budha', 'Hindu' => 'Hindu', 'Konghucu' => 'Konghucu'], '', ['id'=>'agama','class' => 'form-control','style' => 'margin-bottom: 3%']) !!}
                                   </div>
-                                
+
 
                                 <div class="col-md-6">
                                    {!! Form::select('jenis_kelamin', ['' => '-- Jenis Kelamin --', 'Laki-Laki' => 'Laki-Laki', 'Perempuan' => 'Perempuan'], '', ['id'=>'jenis_kelamin','class' => 'form-control']) !!}
@@ -454,7 +454,7 @@
                                   <div class="col-md-6">
                                     {!! Form::select('pendidikan', ['' => '--Pendidikan--','SD' => 'SD','SMP' => 'SMP','SMA/SMK' => 'SMA/SMK', 'Diploma' => 'Diploma', 'Sarjana' => 'Sarjana', 'Pasca Sarjana' => 'Pasca Sarjana', 'Doktor' => 'Doktor'],'', ['id'=>'pendidikan','class' => 'form-control']) !!}
                                   </div>
-                                
+
 
                                 <div class="col-md-6">
                                    {!! Form::select('status', ['' => '--Status--','Janda' => 'Janda','Duda' => 'Duda','Kawin' => 'Kawin', 'Belum Kawin' => 'Belum Kawin'],'', ['id'=>'status','class' => 'form-control']) !!}
@@ -493,7 +493,7 @@
         id[i] = $(this).val();
     });
 
-    if(id.length === 0){ 
+    if(id.length === 0){
         swal("Maaf", "Pilih Data Terlebih Dahulu", "error");
     }else{
       var loader = '<div id="loading"><ul class="bokeh"><li></li><li></li><li></li></ul></div>';
@@ -528,7 +528,7 @@
 
     if(hakAkses == 1 || hakAkses == 3){
       demo.showNotification('top','right','Anda Tidak Memiliki Hak Akses');
-    }else if(id.length === 0){ 
+    }else if(id.length === 0){
         swal("Maaf", "Pilih Data Terlebih Dahulu", "error");
       }else{
       swal({
@@ -570,8 +570,8 @@
               searchData();
             }
         });
-      
-      
+
+
 
       }, function(dismiss) {
         // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
@@ -598,7 +598,7 @@
     var no_angota = $('#no_angota').val();
 
 
-    if(id_sk === ""  || no_angota ==""){ 
+    if(id_sk === ""  || no_angota ==""){
       swal("Maaf", "Lengkapi Data", "error");
     }else{
       swal({
@@ -637,7 +637,7 @@
             data: 'ids='+id+'&jabatanLinmas='+jabatan+'&id_sk='+id_sk+'&no_angota='+no_angota,
             success:function(data) {
               $('#loading').remove();
-               
+
                $('#modalPendaftaran').on('hidden.bs.modal', function (e) {
                 $(this).find("input,textarea,select").val('').end();
                });
@@ -645,8 +645,8 @@
               searchData();
             }
         });
-      
-      
+
+
 
       }, function(dismiss) {
         // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
@@ -671,7 +671,7 @@
         });
     if(hakAkses == 1 || hakAkses == 3){
       demo.showNotification('top','right','Anda Tidak Memiliki Hak Akses');
-    }else if(id.length === 0){ 
+    }else if(id.length === 0){
         swal("Maaf", "Pilih Data Terlebih Dahulu", "error");
         $('#modalPendaftaran').modal('hide');
     }else if(id.length > 1){
@@ -696,8 +696,8 @@
       }
     }
 
-    function TambahkanSk(nomor,id) {
-       $('#nomor_sk').val(nomor);
+    function TambahkanSk(id) {
+
        $('#id_sk').val(id);
        var kode_angota = $('#kode_angota').val();
        $('#Cari').on('hidden.bs.modal', function (e) {
@@ -710,7 +710,7 @@
             dataType:"json",
             data: 'ids='+id+'&kode_angota='+kode_angota,
             success:function(data) {
-            
+              $('#nomor_sk').val($("#nomorSK"+id).val());
               $('#no_angota').val(data.kode);
               $('#tanggal_sk').val(data.tanggal);
             }
@@ -722,7 +722,7 @@
     function DeleteSk() {
       var nomor_sk = $('#nomor_sk').val();
       var id_sk = $('#id_sk').val();
-      
+
       if (nomor_sk =="") {
         swal("Maaf", "Pilih Data Terlebih Dahulu", "error");
       }else{
@@ -770,8 +770,8 @@
               refreshTableSk();
             }
         });
-      
-      
+
+
 
       }, function(dismiss) {
         // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
@@ -824,7 +824,7 @@
         document.getElementById("danru").style.display = "";
       }else{
         document.getElementById("danru").style.display = "none";
-      }      
+      }
     }
 
     function DeleteData(){
@@ -833,7 +833,7 @@
           id[i] = $(this).val();
         });
 
-    if(id.length === 0){ 
+    if(id.length === 0){
         swal("Maaf", "Pilih Data Terlebih Dahulu", "error");
       }else{
       swal({
@@ -875,8 +875,8 @@
               searchData();
             }
         });
-      
-      
+
+
 
       }, function(dismiss) {
         // dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
@@ -982,7 +982,7 @@
                   var img = "/assets/img/close.png";
                  }
 
-             
+
 
                 if (element.no_sk != "") {
                   var no_sk = element.nomor;
@@ -1015,7 +1015,7 @@
                     if (maxLength < 5) throw "maxLength must be at least 5";
 
                     function range(start, end) {
-                        return Array.from(Array(end - start + 1), (_, i) => i + start); 
+                        return Array.from(Array(end - start + 1), (_, i) => i + start);
                     }
 
                     var sideWidth = maxLength < 9 ? 1 : 2;
@@ -1040,7 +1040,7 @@
                     // Breaks on both sides
                     return range(1, sideWidth)
                         .concat([0])
-                        .concat(range(page - leftWidth, page + rightWidth)) 
+                        .concat(range(page - leftWidth, page + rightWidth))
                         .concat([0])
                         .concat(range(totalPages-sideWidth+1, totalPages));
                   }
@@ -1060,16 +1060,16 @@
                     // Number of buttons at the top, not counting prev/next,
                     // but including the dotted buttons.
                     // Must be at least 5:
-                    var paginationSize = 7; 
+                    var paginationSize = 7;
                     var currentPage;
 
                     function showPage(whichPage) {
                       if (whichPage < 1 || whichPage > totalPages) return false;
                       currentPage = whichPage;
                       $("#tbody tr").hide()
-                          .slice((currentPage-1) * limitPerPage, 
+                          .slice((currentPage-1) * limitPerPage,
                                   currentPage * limitPerPage).show();
-                      // Replace the navigation items (not prev/next):            
+                      // Replace the navigation items (not prev/next):
                       $(".pagination li").slice(1, -1).remove();
                       getPageList(totalPages, currentPage, paginationSize).forEach( item => {
                           $("<li>").addClass("page-item")
@@ -1100,7 +1100,7 @@
                     $("#tbody").show();
                     showPage(1);
 
-                    // Use event delegation, as these items are recreated later    
+                    // Use event delegation, as these items are recreated later
                     $(document).on("click", ".pagination li.current-page:not(.active)", function () {
                         return showPage(+$(this).text());
                     });
@@ -1133,7 +1133,7 @@
               var noColumn = 1;
               $.each(data, function(index, element){
 
-                $('#tableSk').append("<tr style='font-size: 12px;'><td style='text-align: center;width: 5%;line-height: 25px;'>"+ noColumn +"</td><td style='text-align: center;'>"+ element.nomor +"</td><td style='text-align: center;'>"+ element.tanggal +"</td><td style='text-align: center;width: 15%;'><button type='submit' class='btn btn-success btn-sm' onclick=TambahkanSk("+ element.nomor +","+element.id+") style='font-size: 11px;'>Tambahkan</button></td></tr>");
+                $('#tableSk').append("<tr style='font-size: 12px;'><td style='text-align: center;width: 5%;line-height: 25px;'>"+ noColumn +"</td><td style='text-align: center;'>"+ element.nomor +"</td><td style='text-align: center;'>"+ element.tanggal +"</td><td style='text-align: center;width: 15%;'><input type='hidden' id='nomorSK"+element.id+"' value='"+element.nomor+"' ><button type='submit' class='btn btn-success btn-sm' onclick=TambahkanSk("+element.id+") style='font-size: 11px;'>Tambahkan 2</button></td></tr>");
 
                 noColumn = noColumn + 1;
               });

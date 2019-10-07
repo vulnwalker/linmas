@@ -389,7 +389,7 @@ class PengesahanController extends Controller
       $query= Linma::select('linmas.*','surat_keputusan.nomor','users.name')
             ->join('users', 'users.id' , '=','linmas.user_id')
             ->leftJoin('surat_keputusan', 'surat_keputusan.id' , '=','linmas.no_sk');
-      
+
       if (!empty($id_kecamatan)) $query->where('linmas.id_kecamatan', "$id_kecamatan");
       if (!empty($id_kelurahan)) $query->where('linmas.id_kelurahan', "$id_kelurahan");
       if (!empty($status_linmas) || $status_linmas == '0') $query->where('linmas.status_linmas', "$status_linmas");
@@ -418,7 +418,7 @@ class PengesahanController extends Controller
 
     public function PengesahanGetKode(Request $request)
     {
-      
+
       $max = Linma::where('status_linmas','1')->count('id');
       $Sk = Sk::findOrFail($request->ids);
       if ($request->kode_angota != "") {
@@ -428,9 +428,10 @@ class PengesahanController extends Controller
       }
 
       $tahun = explode('-',$Sk->tanggal);
-      
+
 
       $data = array(
+            'nomor_sk' => $Sk->no_sk,
             'kode' => $tahun[0].'.'.$auto_kode,
             'tanggal' => $tahun[2].'-'.$tahun[1].'-'.$tahun[0],
             );
@@ -440,11 +441,11 @@ class PengesahanController extends Controller
 
     public function GetPengesahan(Request $request)
     {
-      
+
       $linmas = Linma::select('linmas.*','surat_keputusan.nomor','surat_keputusan.tanggal')
             ->leftJoin('surat_keputusan', 'surat_keputusan.id' , '=','linmas.no_sk')->findOrFail($request->ids);
       if ($linmas->no_angota != "") {
-      	
+
         $explodeKode = explode('.', $linmas->no_angota);
         $explodeTanggalSK = explode('-',$linmas->tanggal);
       	$data = array(
@@ -476,7 +477,7 @@ class PengesahanController extends Controller
     {
 
         $ids = $request->ids;
-        
+
         if ($request->jabatanLinmas != null) {
           $jabatanNama= Jabatan::findOrFail($request->jabatanLinmas);
           $namaJabatan = $jabatanNama->nama;
@@ -518,7 +519,7 @@ class PengesahanController extends Controller
 
     public function checkCard(Request $request)
     {
-            
+
 
       // $linmas = Linma::findOrFail($request->ids);
       $linmas = Linma::whereIn('id',explode(",",$request->ids))->selectRaw("MIN(status_linmas) AS status_linmas")->get();
@@ -533,7 +534,7 @@ class PengesahanController extends Controller
 
     public function cardPrint($id, Request $request)
     {
-      
+
       $pengesahan = Linma::select('linmas.*','surat_keputusan.nomor','surat_keputusan.tanggal')
             ->leftJoin('surat_keputusan', 'surat_keputusan.id' , '=','linmas.no_sk')
             ->whereIn('linmas.id', explode(",",$id))
