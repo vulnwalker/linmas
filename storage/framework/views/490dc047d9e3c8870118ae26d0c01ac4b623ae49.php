@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Data Jabatan
 <?php $__env->stopSection(); ?>

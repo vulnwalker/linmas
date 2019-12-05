@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
   Petunjuk Pengunaan Aplikasi Aplulkat KITE
 <?php $__env->stopSection(); ?>

@@ -1,25 +1,4 @@
 <?php return array (
-  'appzcoder/crud-generator' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Appzcoder\\CrudGenerator\\CrudGeneratorServiceProvider',
-    ),
-  ),
-  'appzcoder/laravel-admin' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Appzcoder\\LaravelAdmin\\LaravelAdminServiceProvider',
-    ),
-  ),
-  'fideloper/proxy' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
-    ),
-  ),
   'laravelcollective/html' => 
   array (
     'providers' => 
@@ -54,6 +33,34 @@
       'Entrust' => 'Zizaco\\Entrust\\EntrustFacade',
     ),
   ),
+  'nunomaduro/collision' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    ),
+  ),
+  'spatie/laravel-activitylog' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
+    ),
+  ),
+  'appzcoder/crud-generator' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Appzcoder\\CrudGenerator\\CrudGeneratorServiceProvider',
+    ),
+  ),
+  'appzcoder/laravel-admin' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Appzcoder\\LaravelAdmin\\LaravelAdminServiceProvider',
+    ),
+  ),
   'barryvdh/laravel-dompdf' => 
   array (
     'providers' => 
@@ -63,6 +70,13 @@
     'aliases' => 
     array (
       'PDF' => 'Barryvdh\\DomPDF\\Facade',
+    ),
+  ),
+  'fideloper/proxy' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
     ),
   ),
   'intervention/image' => 
@@ -92,20 +106,6 @@
     'aliases' => 
     array (
       'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
-    ),
-  ),
-  'nunomaduro/collision' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    ),
-  ),
-  'spatie/laravel-activitylog' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Spatie\\Activitylog\\ActivitylogServiceProvider',
     ),
   ),
 );
